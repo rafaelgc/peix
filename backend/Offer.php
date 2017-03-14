@@ -8,7 +8,7 @@
  */
 class Offer {
 
-    public $publicationDate, $start, $location, $pay, $duration, $hours, $profile, $tasks, $company;
+    public $code, $publicationDate, $start, $location, $pay, $duration, $hours, $profile, $tasks, $company, $description, $observations, $workingDay, $vacancies;
 
     /**
      * @return mixed
@@ -152,6 +152,76 @@ class Offer {
     public function setCompany($company)
     {
         $this->company = $company;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObservations() {
+        return $this->observations;
+    }
+
+    /**
+     * @param mixed $observations
+     */
+    public function setObservations($observations) {
+        $this->observations = $observations;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorkingDay() {
+        return $this->workingDay;
+    }
+
+    /**
+     * @param mixed $workingDay
+     */
+    public function setWorkingDay($workingDay) {
+        $this->workingDay = $workingDay;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVacancies() {
+        return $this->vacancies;
+    }
+
+    /**
+     * @param mixed $vacancies
+     */
+    public function setVacancies($vacancies) {
+        $this->vacancies = $vacancies;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCode() {
+        return $this->code;
+    }
+
+    /**
+     * @param mixed $code
+     */
+    public function setCode($code) {
+        $this->code = $code;
     }
 
 

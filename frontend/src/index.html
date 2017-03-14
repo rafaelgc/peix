@@ -14,9 +14,17 @@
         <span class="header-help" ng-click="showHelpPopup=true">?</span>
     </header>
     <div class="content">
+
+        <div class="more-container">
+            <a class="button" target="_blank" href="">Estadísticas</a>
+            <a class="button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
+        </div>
+
         <h1>Listado de ofertas</h1>
 
         <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
+
+        Bolsa media: {{getAveragePay() | number : 2}}€, {{getAveragePayPerHour() | number : 2}}€/hora
 
         <div class="offers">
             <div ng-repeat="offer in offers">
@@ -30,13 +38,23 @@
                         </div>
 
                         <div class="offer-label">
-                            <span class="offer-label-name">Duracion:</span>
-                            <span class="offer-label-value">?? meses, {{offer.hours}} horas al dia (aprox. ??? ECTS)</span>
+                            <span class="offer-label-name">Duración:</span>
+                            <span class="offer-label-value">{{offer.duration}} meses, {{offer.hours}} horas al dia (aprox. {{calcECTS(offer)}} ECTS)</span>
+                        </div>
+
+                        <div class="offer-label">
+                            <span class="offer-label-name">Jornada:</span>
+                            <span class="offer-label-value">{{offer.workingDay}}</span>
+                        </div>
+
+                        <div class="offer-label">
+                            <span class="offer-label-name">Vacantes:</span>
+                            <span class="offer-label-value">{{offer.vacancies}}</span>
                         </div>
 
                         <div class="offer-label">
                             <span class="offer-label-name">Bolsa:</span>
-                            <span class="offer-label-value">{{offer.pay}} (aprox. ???e/hora)</span>
+                            <span class="offer-label-value">{{offer.pay}} (aprox. {{calcPayPerHour(offer)}}€/hora)</span>
                         </div>
 
                         <div class="offer-label">
@@ -48,10 +66,24 @@
                     <div class="offer-profile-description">
                         {{offer.profile}}
                     </div>
-                    <div class="more-container"><img src="images/more.png"></div>
+
+                    <h3 class="offer-profile-title">Descripción</h3>
+                    <div class="offer-profile-description">
+                        {{offer.description}}
+                    </div>
+
+                    <h3 class="offer-profile-title">Observaciones</h3>
+                    <div class="offer-profile-description">
+                        {{offer.observations}}
+                    </div>
+
+                    <form class="more-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
+                        <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
+                        <input type="submit" class="button" value="Ver en la web oficial">
+                    </form>
                 </div>
 
-                <div ng-if="$odd" class="offer-vertical-separator" style="clear: both"></div>
+                <div class="offer-vertical-separator" style="clear: both"></div>
 
             </div>
 
