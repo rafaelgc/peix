@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-controller="AppController">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>peix</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" class="logo">
+        <span class="header-name">peix</span>
+        <span class="header-help" ng-click="showHelpPopup=true">?</span>
+    </header>
+    <div class="content">
+        <h1>Listado de ofertas</h1>
+
+        <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
+
+        <div class="offers">
+            <div ng-repeat="offer in offers">
+                <div class="offer">
+                    <h2 class="offer-title">{{offer.company}}</h2>
+                    <h3 class="offer-subtitle">{{offer.tasks}}</h3>
+                    <div class="offer-body">
+                        <div class="offer-label">
+                            <span class="offer-label-name">Inicio:</span>
+                            <span class="offer-label-value">{{offer.start}}</span>
+                        </div>
+
+                        <div class="offer-label">
+                            <span class="offer-label-name">Duracion:</span>
+                            <span class="offer-label-value">?? meses, {{offer.hours}} horas al dia (aprox. ??? ECTS)</span>
+                        </div>
+
+                        <div class="offer-label">
+                            <span class="offer-label-name">Bolsa:</span>
+                            <span class="offer-label-value">{{offer.pay}} (aprox. ???e/hora)</span>
+                        </div>
+
+                        <div class="offer-label">
+                            <span class="offer-label-name">Localidad:</span>
+                            <span class="offer-label-value">{{offer.location}}</span>
+                        </div>
+                    </div>
+                    <h3 class="offer-profile-title">Perfil</h3>
+                    <div class="offer-profile-description">
+                        {{offer.profile}}
+                    </div>
+                    <div class="more-container"><img src="images/more.png"></div>
+                </div>
+
+                <div ng-if="$odd" class="offer-vertical-separator" style="clear: both"></div>
+
+            </div>
+
+            <div style="clear: both"></div>
+
+        </div>
+
+    </div>
+
+    <div class="help-popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
+    <div class="help-popup" ng-class="{'popup-open': showHelpPopup}">
+        <div class="help-title">Ayuda</div>
+        <div class="help-content">
+            <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
+
+            <p>El objetivo es adaptar la web a los nuevos estándares, facilitar la navegación y el acceso desde dispositivos móviles.</p>
+
+            <p>Actualmente esta web sólo permite visualizar las ofertas, si quieres publicar una nueva o inscribirte en alguna deberás ir a la <a href="https://www.inf.upv.es/int/peix/">web oficial</a>.</p>
+        </div>
+        <div class="help-title">Contacto</div>
+        <div class="help-content">
+            contact@peix.info
+        </div>
+        <div class="help-title">Créditos</div>
+        <div class="help-content">
+            <p>Programación y diseño: Rafael González Carrizo</p>
+            <p>Iconos diseñados por <a href='http://www.freepik.com/free-vector/fish-icons-collection_1069735.htm'>Freepik</a></p>
+        </div>
+        <div class="help-title">Tecnología y código</div>
+        <div class="help-content">
+            <p>peix está desarrollado con AngularJS y PHP.</p>
+            <p>Puedes acceder al código desde el repositorio de <a href="https://bitbucket.org/RafaG/peix">Bitbucket</a>.</p>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

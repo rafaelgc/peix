@@ -1,0 +1,154 @@
+html, body {
+    margin: 0px;
+    font-family: 'Open Sans', 'Arial', 'sans-serif';
+    font-size: 12px;
+    background-color: #f6f6f6;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #00A08A;
+    color: white;
+    padding: 20px;
+    font-size: 160%;
+}
+
+.header-help {
+    float: right;
+    text-shadow: rgb(3, 3, 3) 0px 2px 4px;
+    cursor: pointer;
+}
+
+.logo {
+    max-width: 30px;
+    vertical-align: middle;
+}
+
+.header-name {
+    margin-left: 10px;
+}
+
+.content {
+    padding: 15px 0px 25px 0px;
+    max-width: 1024px;
+    margin: 15px auto;
+    background-color: white;
+}
+
+h1 {
+    margin: 0px 0px 30px 0px;
+    text-align: center;
+    font-size: 130%;
+    text-decoration: underline;
+}
+
+h2 {
+    margin: 0px;
+    padding: 0px;
+}
+
+.offers {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.offer {
+    width: 50%;
+    padding: 10px;
+    float: left;
+}
+
+.offer.left {
+    border-right: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+
+@media (max-width: 900px) {
+    .offer {
+        float: none;
+        width: 100%;
+        border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .offer.left {
+        border-right: none;
+    }
+}
+
+
+.offer-subtitle {
+    margin: 5px 0px 3px 0px;
+    padding: 0;
+    font-style: italic;
+}
+
+.offer-label-name {
+    min-width: 75px;
+    display: inline-block;
+}
+
+.offer-profile-title {
+    margin: 5px 0px 3px 0px;
+}
+
+.more-container {
+    text-align: center;
+}
+
+.more-container img {
+    max-width: 30px;
+    cursor: pointer;
+}
+
+.offer-vertical-separator {
+    min-height: 1px;
+    min-width: 100%;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 900px) {
+    .offer-vertical-separator {
+        display: none;
+    }
+}
+
+
+.help-popup-base {
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0%;
+    left: 0%;
+    right: 0%;
+    bottom: 0%;
+    position: fixed;
+    cursor: pointer;
+    display: none;
+}
+
+.help-popup {
+    padding: 15px;
+    position: fixed;
+    left: 25%;
+    right: 25%;
+    top: 10%;
+    background-color: white;
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .help-popup {
+        left: 5%;
+        right: 5%;
+    }
+}
+
+.popup-open {
+    display: block;
+}
+
+.help-title {
+    font-size: 150%;
+}
