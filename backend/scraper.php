@@ -6,7 +6,7 @@
  * Time: 1:05
  */
 include 'external/simple_html_dom.php';
-include 'external/predis/Autoloader.php';
+require __DIR__ . '/vendor/autoload.php';
 include 'Offer.php';
 
 Predis\Autoloader::register();
