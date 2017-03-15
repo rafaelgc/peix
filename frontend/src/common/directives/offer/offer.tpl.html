@@ -24,7 +24,7 @@
 
         <div class="offer-label">
             <span class="offer-label-name">Bolsa:</span>
-            <span class="offer-label-value">{{offer.pay}} (aprox. {{calcPayPerHour(offer)}}€/hora)</span>
+            <span class="offer-label-value">{{offer.pay}}€ (aprox. {{calcPayPerHour(offer) | number : 2}}€/hora)</span>
         </div>
 
         <div class="offer-label">

@@ -9,23 +9,13 @@ include_once 'external/simple_html_dom.php';
 require_once __DIR__ . '/vendor/autoload.php';
 include_once 'Offer.php';
 
-define('UPDATE_MIN_TIME', 1); //Minutos.
+define('UPDATE_MIN_TIME', 60); //Minutos.
 
 ini_set('display_errors', 1);
 
-$client = new Predis\Client();
-
-$lastUpdate = $client->get('peix.lastUpdate');
-
-if ($lastUpdate === null) {
-    runScraper($client);
-}
-else {
-    $lastUpdate = intval($lastUpdate);
-
-    if (time() - $lastUpdate > UPDATE_MIN_TIME) {
-        runScraper($client);
-    }
+function needsUpdate($redisClient) {
+    $lastUpdate = $redisClient->get('peix.lastUpdate');
+    return $lastUpdate === null || (time() - intval($lastUpdate) > UPDATE_MIN_TIME * 60);
 }
 
 function runScraper($redisClient) {
@@ -40,15 +30,17 @@ function runScraper($redisClient) {
 
         $rows = $offer->find('tr');
 
+        $pay = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
+
         //Una parte de la información se puede extraer de la página principal...
 
-        $newOffer->setCode($rows[0]->find('td')[3]->plaintext);
+        $newOffer->setCode(intval(trim($rows[0]->find('td')[3]->plaintext)));
         $newOffer->setPublicationDate(trim($rows[0]->find('td')[1]->plaintext));
         $newOffer->setCompany(trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
         $newOffer->setLocation(trim($rows[2]->find('td')[1]->plaintext));
         $newOffer->setStart(trim($rows[3]->find('td')[1]->plaintext));
         $newOffer->setHours(trim($rows[4]->find('td')[1]->plaintext));
-        $newOffer->setPay(trim($rows[4]->find('td')[3]->plaintext));
+        $newOffer->setPay($pay);
         $newOffer->setTasks(trim($rows[6]->find('td')[1]->plaintext));
         $newOffer->setProfile(trim($rows[7]->find('td')[1]->plaintext));
 
@@ -74,10 +66,12 @@ function runScraper($redisClient) {
 
         $detailsRows = $table[0]->find('tr');
 
+        $duration = intval(explode(' ', trim($detailsRows[6]->find('td')[1]->plaintext))[0]);
+
         $newOffer->setDescription(trim($detailsRows[3]->find('td')[1]->plaintext));
-        $newOffer->setDuration(trim($detailsRows[6]->find('td')[1]->plaintext));
+        $newOffer->setDuration($duration);
         $newOffer->setWorkingDay(trim($detailsRows[7]->find('td')[1]->plaintext));
-        $newOffer->setVacancies(trim($detailsRows[7]->find('td')[3]->plaintext));
+        $newOffer->setVacancies(intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
         $newOffer->setObservations(trim($detailsRows[11]->find('td')[1]->plaintext));
 
 
