@@ -30,22 +30,44 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
 
         $scope.getSavedOffers = function () {
             return appLogic.getSavedOffers($scope.offers);
-        }
+        };
 
-        console.log($scope.offers);
+        $scope.clearFilters = function () {
+            $scope.filters = {};
+        };
     }])
-    .factory('appLogic', ['$resource', function ($resource) {
+    .factory('appLogic', ['$resource', '$window', function ($resource, $window) {
 
         var Offer = $resource('http://localhost/peix/backend/get.php');
 
+        //Se cargan los códigos de las ofertas que el usuario ha guardado.
+        var saved = [];
+        if ($window.localStorage.getItem('saved')) {
+            saved = $window.localStorage.getItem('saved').split(',');
+        }
+
+        //Función auxiliar para los filtros.
         function unset(attr) {
             return attr === undefined || attr === null || attr === "";
         }
 
         return {
             getOffers: function () {
+                var offers = Offer.query();
 
-                return Offer.query();
+                //Marcar como guardados aquellos que el usuario ha guardado.
+                offers.$promise.then(function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        for (var j = 0; j < saved.length; j++) {
+                            if (data[i].code == saved[j]) {
+                                data[i].saved = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                return offers;
 
             },
 
@@ -78,7 +100,7 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                     }
                 }
                 return sOffers;
-            }
+            },
 
         };
 

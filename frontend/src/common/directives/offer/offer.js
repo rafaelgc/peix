@@ -33,48 +33,40 @@ angular.module('common.directives.offer', [])
         return {
             unsave: function (offer) {
                 var oldSaved = $window.localStorage.getItem('saved');
-                if (!oldSaved) oldSaved = "";
+                if (!oldSaved) oldSaved = '';
 
-                var oldCodes = oldSaved.split(',');
+                var splited = oldSaved.split(',');
+                if (oldSaved === '') { splited = []; }
 
-                var found = false;
-
-                for (var i = 0; i < oldCodes.length; i++) {
-                    if (oldCodes === offer.code) {
-                        oldCodes = oldCodes.splice(i, 1);
-                        found = true;
+                for (var i = 0; i < splited.length; i++) {
+                    if (splited[i] == offer.code) {
+                        splited.splice(i, 1);
                         break;
                     }
                 }
-                if (found) {
-                    $window.localStorage.setItem('saved', oldCodes.join(','));
-                }
+
+                $window.localStorage.setItem('saved', splited.join(','));
             },
 
             save: function (offer) {
-
-                console.log('saved');
-
                 var oldSaved = $window.localStorage.getItem('saved');
-                if (!oldSaved) oldSaved = "";
+                if (!oldSaved) oldSaved = '';
 
-                var oldCodes = oldSaved.split(',');
-
-                console.log(oldCodes);
+                var splited = oldSaved.split(',');
+                if (oldSaved === '') { splited = []; }
 
                 var found = false;
-
-                for (var i = 0; i < oldCodes.length; i++) {
-                    if (oldCodes === offer.code) {
+                for (var i = 0; i < splited.length && !found; i++) {
+                    if (splited[i] == offer.code) {
                         found = true;
-                        break;
                     }
                 }
+
                 if (!found) {
-                    console.log('not found');
-                    oldCodes.push(offer.code);
-                    $window.localStorage.setItem('saved', oldCodes.join(','));
+                    splited.push(offer.code);
                 }
+
+                $window.localStorage.setItem('saved', splited.join(','));
 
             }
         };

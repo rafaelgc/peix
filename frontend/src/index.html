@@ -16,14 +16,14 @@
     <div class="content">
 
         <div class="button-container">
-            <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible">Filtros</a>
+            <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
             <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
             <a class="right button" style="margin-right: 3px" ng-click="showSavedOffersPopup = !sjpwSavedOffersPopup">Ofertas guardadas</a>
             <a class="right button" style="margin-right: 3px" ng-click="showStatsPopup = !showStatsPopup">Estadísticas</a>
             <div class="clear"></div>
         </div>
 
-        <div ng-show="filtersVisible">
+        <div ng-show="filtersVisible" style="margin-bottom: 25px">
             <div class="form-block">
                 <label>Bolsa mínima: </label><input ng-model="filters.minPay" size="4" type="text">€
             </div>
@@ -67,7 +67,11 @@
     <div class="popup block" ng-class="{'popup-open': showStatsPopup}">
         <div class="block-title">Estadísticas</div>
         <div class="block-content">
-            Bolsa media: {{getAveragePay() | number : 2}}€, {{getAveragePayPerHour() | number : 2}}€/hora
+            <div class="stats-title">Bolsa media</div>
+            <div class="stats-attr">{{getAveragePay() | number : 2}}€/mes</div>
+
+            <div class="stats-title">Pago medio por hora</div>
+            <div class="stats-attr">{{getAveragePayPerHour() | number : 2}}€/hora</div>
         </div>
     </div>
 
