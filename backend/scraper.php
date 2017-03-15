@@ -5,19 +5,30 @@
  * Date: 14/03/2017
  * Time: 1:05
  */
-include 'external/simple_html_dom.php';
-require __DIR__ . '/vendor/autoload.php';
-include 'Offer.php';
+include_once 'external/simple_html_dom.php';
+require_once __DIR__ . '/vendor/autoload.php';
+include_once 'Offer.php';
 
-Predis\Autoloader::register();
+define('UPDATE_MIN_TIME', 1); //Minutos.
 
 ini_set('display_errors', 1);
 
 $client = new Predis\Client();
 
-$value = $client->get('peix.offers');
+$lastUpdate = $client->get('peix.lastUpdate');
 
-if ($value === null) {
+if ($lastUpdate === null) {
+    runScraper($client);
+}
+else {
+    $lastUpdate = intval($lastUpdate);
+
+    if (time() - $lastUpdate > UPDATE_MIN_TIME) {
+        runScraper($client);
+    }
+}
+
+function runScraper($redisClient) {
     $html = file_get_html('https://www.inf.upv.es/int/peix/alumnos/listado_ofertas.php');
 
     $offers = $html->find('table[class=tabla_base]');
@@ -74,10 +85,7 @@ if ($value === null) {
     }
 
     $res = json_encode($offerList);
-    $client->set('peix.offers', $res, "EX", 3600);
 
-    echo $res;
-}
-else {
-    echo $value;
+    $redisClient->set('peix.offers', $res);
+    $redisClient->set('peix.lastUpdate', time());
 }

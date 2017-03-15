@@ -15,9 +15,23 @@
     </header>
     <div class="content">
 
-        <div class="more-container">
-            <a class="button" target="_blank" href="">Estadísticas</a>
-            <a class="button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
+        <div class="button-container">
+            <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible">Filtros</a>
+            <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
+            <a class="right button" style="margin-right: 3px" target="_blank" href="">Estadísticas</a>
+            <div class="clear"></div>
+        </div>
+
+        <div ng-show="filtersVisible">
+            <div class="form-block">
+                <label>Bolsa mínima: </label><input ng-model="filters.minPay" size="4" type="text">€
+            </div>
+            <div class="form-block">
+                <label>Duración: </label>desde <input size="2" type="text" ng-model="filters.minMonths"> hasta <input ng-model="filters.maxMonths" size="2" type="text"> meses
+            </div>
+            <div class="form-block">
+                <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
+            </div>
         </div>
 
         <h1>Listado de ofertas</h1>
@@ -27,7 +41,7 @@
         Bolsa media: {{getAveragePay() | number : 2}}€, {{getAveragePayPerHour() | number : 2}}€/hora
 
         <div class="offers">
-            <div ng-repeat="offer in offers">
+            <div ng-repeat="offer in getFilteredOffers()">
                 <div class="offer">
                     <h2 class="offer-title">{{offer.company}}</h2>
                     <h3 class="offer-subtitle">{{offer.tasks}}</h3>
@@ -77,9 +91,10 @@
                         {{offer.observations}}
                     </div>
 
-                    <form class="more-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
+                    <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
                         <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
-                        <input type="submit" class="button" value="Ver en la web oficial">
+                        <input type="submit" class="right button" value="Ver en la web oficial">
+                        <div class="clear"></div>
                     </form>
                 </div>
 

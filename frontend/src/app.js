@@ -1,7 +1,8 @@
 angular.module('app', ['ngResource'])
-    .controller('AppController', ['$scope', 'appLogic', function ($scope, appLogic) {
+    .controller('AppController', ['$scope', 'appLogic', '$q', function ($scope, appLogic, $q) {
 
         $scope.offers = appLogic.getOffers();
+        $scope.filters = {};
 
         $scope.isLoading = function () {
             return $scope.offers.$resolved === false;
@@ -31,11 +32,15 @@ angular.module('app', ['ngResource'])
             return sum / $scope.offers.length;
         };
 
+        $scope.getFilteredOffers = function () {
+            return appLogic.getFilteredOffers($scope.offers, $scope.filters);
+        };
+
         console.log($scope.offers);
     }])
     .factory('appLogic', ['$resource', function ($resource) {
 
-        var Offer = $resource('http://localhost/peix/backend/scraper.php');
+        var Offer = $resource('http://localhost/peix/backend/get.php');
 
         return {
             getOffers: function () {
@@ -43,6 +48,27 @@ angular.module('app', ['ngResource'])
                 return Offer.query();
 
             },
+
+            getFilteredOffers: function (offers, filters) {
+                var fOffers = [];
+
+                for (var i = 0; i < offers.length; i++) {
+                    var offer = offers[i];
+                    var matching = filters.minPay === undefined || parseInt(offer.pay) >= filters.minPay;
+                    matching = matching && (filters.minMonths === undefined || parseInt(offer.duration) >= filters.minMonths);
+                    matching = matching && (filters.maxMonths === undefined || parseInt(offer.duration) <= filters.maxMonths);
+                    matching = matching && (filters.minHours === undefined || parseInt(offer.hours) >= filters.minHours);
+                    matching = matching && (filters.maxHours === undefined || parseInt(offer.hours) <= filters.maxHours);
+
+                    if (matching) {
+                        fOffers.push(offer);
+                    }
+
+
+                }
+
+                return fOffers;
+            }
 
         };
 

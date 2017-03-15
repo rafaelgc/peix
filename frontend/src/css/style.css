@@ -86,10 +86,8 @@ h2 {
     margin: 5px 0px 3px 0px;
 }
 
-.more-container {
+.button-container {
     padding: 15px 0px 15px 0px;
-    text-align: right;
-
 }
 
 .button {
@@ -99,8 +97,8 @@ h2 {
     padding: 5px;
     font-size: 120%;
     background-color: white;
-    transition: background-color 0.2s;
     box-shadow: 0px 4px 5px -3px rgba(0,0,0,0.75);
+    transition: background-color 0.2s, box-shadow 0.2s;
     text-decoration: none;
 }
 
@@ -108,6 +106,31 @@ h2 {
     background-color: #00A08A;
     color: white;
 }
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.button.toggled {
+    box-shadow: none;
+    background-color: #00A08A;
+    color: white;
+    box-shadow: 0px 2px 5px -3px rgba(0,0,0,0.75);
+}
+
+.button.toggled:hover {
+    background-color: #00b69f;
+}
+
+
 
 .more-container img {
     max-width: 30px;
@@ -120,10 +143,21 @@ h2 {
     border-bottom: solid 1px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 900px) {
-    .offer-vertical-separator {
-        display: none;
-    }
+/*FORMS*/
+
+input {
+    border: solid 1px #00A08A;
+    padding: 5px;
+}
+
+.form-block {
+    font-size: 140%;
+    padding: 5px 0px 5px 0px;
+    border-bottom: solid 1px #e3e3e3;
+}
+
+.form-block label {
+    font-weight: bold;
 }
 
 
