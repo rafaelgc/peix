@@ -18,7 +18,8 @@
         <div class="button-container">
             <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible">Filtros</a>
             <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
-            <a class="right button" style="margin-right: 3px" target="_blank" href="">Estadísticas</a>
+            <a class="right button" style="margin-right: 3px" ng-click="showSavedOffersPopup = !sjpwSavedOffersPopup">Ofertas guardadas</a>
+            <a class="right button" style="margin-right: 3px" ng-click="showStatsPopup = !showStatsPopup">Estadísticas</a>
             <div class="clear"></div>
         </div>
 
@@ -37,69 +38,10 @@
         <h1>Listado de ofertas</h1>
 
         <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
-
-        Bolsa media: {{getAveragePay() | number : 2}}€, {{getAveragePayPerHour() | number : 2}}€/hora
-
         <div class="offers">
             <div ng-repeat="offer in getFilteredOffers()">
-                <div class="offer">
-                    <h2 class="offer-title">{{offer.company}}</h2>
-                    <h3 class="offer-subtitle">{{offer.tasks}}</h3>
-                    <div class="offer-body">
-                        <div class="offer-label">
-                            <span class="offer-label-name">Inicio:</span>
-                            <span class="offer-label-value">{{offer.start}}</span>
-                        </div>
-
-                        <div class="offer-label">
-                            <span class="offer-label-name">Duración:</span>
-                            <span class="offer-label-value">{{offer.duration}} meses, {{offer.hours}} horas al dia (aprox. {{calcECTS(offer)}} ECTS)</span>
-                        </div>
-
-                        <div class="offer-label">
-                            <span class="offer-label-name">Jornada:</span>
-                            <span class="offer-label-value">{{offer.workingDay}}</span>
-                        </div>
-
-                        <div class="offer-label">
-                            <span class="offer-label-name">Vacantes:</span>
-                            <span class="offer-label-value">{{offer.vacancies}}</span>
-                        </div>
-
-                        <div class="offer-label">
-                            <span class="offer-label-name">Bolsa:</span>
-                            <span class="offer-label-value">{{offer.pay}} (aprox. {{calcPayPerHour(offer)}}€/hora)</span>
-                        </div>
-
-                        <div class="offer-label">
-                            <span class="offer-label-name">Localidad:</span>
-                            <span class="offer-label-value">{{offer.location}}</span>
-                        </div>
-                    </div>
-                    <h3 class="offer-profile-title">Perfil</h3>
-                    <div class="offer-profile-description">
-                        {{offer.profile}}
-                    </div>
-
-                    <h3 class="offer-profile-title">Descripción</h3>
-                    <div class="offer-profile-description">
-                        {{offer.description}}
-                    </div>
-
-                    <h3 class="offer-profile-title">Observaciones</h3>
-                    <div class="offer-profile-description">
-                        {{offer.observations}}
-                    </div>
-
-                    <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
-                        <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
-                        <input type="submit" class="right button" value="Ver en la web oficial">
-                        <div class="clear"></div>
-                    </form>
-                </div>
-
+                <offer offer-data="offer"></offer>
                 <div class="offer-vertical-separator" style="clear: both"></div>
-
             </div>
 
             <div style="clear: both"></div>
@@ -108,34 +50,58 @@
 
     </div>
 
-    <div class="help-popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
-    <div class="help-popup" ng-class="{'popup-open': showHelpPopup}">
-        <div class="help-title">Ayuda</div>
-        <div class="help-content">
-            <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
+    <div class="popup-base" ng-class="{'popup-open': showSavedOffersPopup}" ng-click="showSavedOffersPopup=false"></div>
+    <div class="popup block" ng-class="{'popup-open': showSavedOffersPopup}">
+        <div class="block-title">Ofertas guardadas</div>
+        <div class="block-content">
+            <div>
+                <div ng-repeat="offer in getSavedOffers()">
+                    <offer offer-data="offer"></offer>
+                    <div class="offer-vertical-separator" style="clear: both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <p>El objetivo es adaptar la web a los nuevos estándares, facilitar la navegación y el acceso desde dispositivos móviles.</p>
+    <div class="popup-base" ng-class="{'popup-open': showStatsPopup}" ng-click="showStatsPopup=false"></div>
+    <div class="popup block" ng-class="{'popup-open': showStatsPopup}">
+        <div class="block-title">Estadísticas</div>
+        <div class="block-content">
+            Bolsa media: {{getAveragePay() | number : 2}}€, {{getAveragePayPerHour() | number : 2}}€/hora
+        </div>
+    </div>
 
-            <p>Actualmente esta web sólo permite visualizar las ofertas, si quieres publicar una nueva o inscribirte en alguna deberás ir a la <a href="https://www.inf.upv.es/int/peix/">web oficial</a>.</p>
-        </div>
-        <div class="help-title">Contacto</div>
-        <div class="help-content">
-            contact@peix.info
-        </div>
-        <div class="help-title">Créditos</div>
-        <div class="help-content">
-            <p>Programación y diseño: Rafael González Carrizo</p>
-            <p>Iconos diseñados por <a href='http://www.freepik.com/free-vector/fish-icons-collection_1069735.htm'>Freepik</a></p>
-        </div>
-        <div class="help-title">Tecnología y código</div>
-        <div class="help-content">
-            <p>peix está desarrollado con AngularJS y PHP.</p>
-            <p>Puedes acceder al código desde el repositorio de <a href="https://bitbucket.org/RafaG/peix">Bitbucket</a>.</p>
+    <div class="popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
+    <div class="popup block" ng-class="{'popup-open': showHelpPopup}">
+        <div class="block-title">Acerca de</div>
+        <div class="block-content">
+            <div>
+                <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
+
+                <p>El objetivo es adaptar la web a los nuevos estándares, facilitar la navegación y el acceso desde dispositivos móviles.</p>
+
+                <p>Actualmente esta web sólo permite visualizar las ofertas, si quieres publicar una nueva o inscribirte en alguna deberás ir a la <a href="https://www.inf.upv.es/int/peix/">web oficial</a>.</p>
+            </div>
+            <div class="title">Contacto</div>
+            <p>
+                contact@peix.info
+            </p>
+            <div class="title">Créditos</div>
+            <div>
+                <p>Programación y diseño: Rafael González Carrizo</p>
+                <p>Iconos diseñados por <a href='http://www.freepik.com/free-vector/fish-icons-collection_1069735.htm'>Freepik</a></p>
+            </div>
+            <div class="title">Tecnología y código</div>
+            <div>
+                <p>peix está desarrollado con AngularJS y PHP. Utiliza una base de datos Redis para almacenar las ofertas.</p>
+                <p>Puedes acceder al código desde el repositorio de <a href="https://bitbucket.org/RafaG/peix">Bitbucket</a>.</p>
+            </div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
     <script src="app.js"></script>
+    <script src="common/directives/offer/offer.js"></script>
 </body>
 </html>
 

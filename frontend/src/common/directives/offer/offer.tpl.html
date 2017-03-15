@@ -1,0 +1,55 @@
+<div class="offer">
+    <h2 class="offer-title">{{offer.company}}</h2>
+    <h3 class="offer-subtitle">{{offer.tasks}}</h3>
+    <div class="offer-body">
+        <div class="offer-label">
+            <span class="offer-label-name">Inicio:</span>
+            <span class="offer-label-value">{{offer.start}}</span>
+        </div>
+
+        <div class="offer-label">
+            <span class="offer-label-name">Duración:</span>
+            <span class="offer-label-value">{{offer.duration}} meses, {{offer.hours}} horas al dia (aprox. {{calcECTS(offer)}} ECTS)</span>
+        </div>
+
+        <div class="offer-label">
+            <span class="offer-label-name">Jornada:</span>
+            <span class="offer-label-value">{{offer.workingDay}}</span>
+        </div>
+
+        <div class="offer-label">
+            <span class="offer-label-name">Vacantes:</span>
+            <span class="offer-label-value">{{offer.vacancies}}</span>
+        </div>
+
+        <div class="offer-label">
+            <span class="offer-label-name">Bolsa:</span>
+            <span class="offer-label-value">{{offer.pay}} (aprox. {{calcPayPerHour(offer)}}€/hora)</span>
+        </div>
+
+        <div class="offer-label">
+            <span class="offer-label-name">Localidad:</span>
+            <span class="offer-label-value">{{offer.location}}</span>
+        </div>
+    </div>
+    <h3 class="offer-profile-title">Perfil</h3>
+    <div class="offer-profile-description">
+        {{offer.profile}}
+    </div>
+
+    <h3 class="offer-profile-title">Descripción</h3>
+    <div class="offer-profile-description">
+        {{offer.description}}
+    </div>
+
+    <h3 class="offer-profile-title">Observaciones</h3>
+    <div class="offer-profile-description">
+        {{offer.observations}}
+    </div>
+    <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
+        <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
+        <a class="left button" ng-class="{'toggled': offer.saved}" ng-click="saveOffer(offer)">Guardar</a>
+        <input type="submit" class="right button" value="Ver en la web oficial">
+        <div class="clear"></div>
+    </form>
+</div>

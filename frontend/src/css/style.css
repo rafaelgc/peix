@@ -57,20 +57,6 @@ h2 {
     padding: 20px 0px 15px 0px;
 }
 
-@media (max-width: 900px) {
-    .offer {
-        float: none;
-        width: 100%;
-        border-bottom: solid 1px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .offer.left {
-        border-right: none;
-    }
-}
-
-
 .offer-subtitle {
     margin: 5px 0px 3px 0px;
     padding: 0;
@@ -160,8 +146,23 @@ input {
     font-weight: bold;
 }
 
+.block {
+    background-color: white;
+    overflow-y: scroll;
+}
 
-.help-popup-base {
+.block-title {
+    border-bottom: solid 1px #e3e3e3;
+    padding: 15px;
+    font-size: 150%;
+}
+
+.block-content {
+    padding: 15px;
+}
+
+
+.popup-base {
     background-color: rgba(0, 0, 0, 0.5);
     top: 0%;
     left: 0%;
@@ -172,18 +173,18 @@ input {
     display: none;
 }
 
-.help-popup {
-    padding: 15px;
+.popup {
     position: fixed;
     left: 25%;
     right: 25%;
+    bottom: 10%;
     top: 10%;
     background-color: white;
     display: none;
 }
 
 @media (max-width: 800px) {
-    .help-popup {
+    .popup {
         left: 5%;
         right: 5%;
     }
@@ -193,6 +194,6 @@ input {
     display: block;
 }
 
-.help-title {
+.title {
     font-size: 150%;
 }
