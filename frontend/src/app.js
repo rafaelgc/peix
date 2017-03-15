@@ -1,18 +1,11 @@
-angular.module('app', ['ngResource'])
-    .controller('AppController', ['$scope', 'appLogic', function ($scope, appLogic) {
+angular.module('app', ['ngResource', 'common.directives.offer'])
+    .controller('AppController', ['$scope', 'appLogic', '$q', function ($scope, appLogic, $q) {
 
         $scope.offers = appLogic.getOffers();
+        $scope.filters = {};
 
         $scope.isLoading = function () {
             return $scope.offers.$resolved === false;
-        };
-
-        $scope.calcECTS = function (offer) {
-            return (parseInt(offer.duration) * 4 * 5 * parseInt(offer.hours)) / 25;
-        };
-
-        $scope.calcPayPerHour = function (offer) {
-            return (parseFloat(offer.pay) / (parseFloat(offer.hours) * 4 * 5));
         };
 
         $scope.getAveragePay = function () {
@@ -31,17 +24,82 @@ angular.module('app', ['ngResource'])
             return sum / $scope.offers.length;
         };
 
-        console.log($scope.offers);
-    }])
-    .factory('appLogic', ['$resource', function ($resource) {
+        $scope.getFilteredOffers = function () {
+            return appLogic.getFilteredOffers($scope.offers, $scope.filters);
+        };
 
-        var Offer = $resource('http://localhost/peix/backend/scraper.php');
+        $scope.getSavedOffers = function () {
+            return appLogic.getSavedOffers($scope.offers);
+        };
+
+        $scope.clearFilters = function () {
+            $scope.filters = {};
+        };
+    }])
+    .factory('appLogic', ['$resource', '$window', function ($resource, $window) {
+
+        var Offer = $resource('http://localhost/peix/backend/get.php');
+
+        //Se cargan los códigos de las ofertas que el usuario ha guardado.
+        var saved = [];
+        if ($window.localStorage.getItem('saved')) {
+            saved = $window.localStorage.getItem('saved').split(',');
+        }
+
+        //Función auxiliar para los filtros.
+        function unset(attr) {
+            return attr === undefined || attr === null || attr === "";
+        }
 
         return {
             getOffers: function () {
+                var offers = Offer.query();
 
-                return Offer.query();
+                //Marcar como guardados aquellos que el usuario ha guardado.
+                offers.$promise.then(function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        for (var j = 0; j < saved.length; j++) {
+                            if (data[i].code == saved[j]) {
+                                data[i].saved = true;
+                                break;
+                            }
+                        }
+                    }
+                });
 
+                return offers;
+
+            },
+
+            getFilteredOffers: function (offers, filters) {
+                var fOffers = [];
+                for (var i = 0; i < offers.length; i++) {
+                    var offer = offers[i];
+                    var matching = filters.minPay === undefined || parseInt(offer.pay) >= filters.minPay;
+                    matching = matching && (unset(filters.minMonths) || parseInt(offer.duration) >= filters.minMonths);
+                    matching = matching && (unset(filters.maxMonths) || parseInt(offer.duration) <= filters.maxMonths);
+                    matching = matching && (unset(filters.minHours) || parseInt(offer.hours) >= filters.minHours);
+                    matching = matching && (unset(filters.maxHours) || parseInt(offer.hours) <= filters.maxHours);
+
+                    if (matching) {
+                        fOffers.push(offer);
+                    }
+
+
+                }
+
+                return fOffers;
+            },
+
+            getSavedOffers: function (offers) {
+                var sOffers = [];
+                for (var i = 0; i < offers.length; i++) {
+                    var offer = offers[i];
+                    if (offer.saved) {
+                        sOffers.push(offer);
+                    }
+                }
+                return sOffers;
             },
 
         };
