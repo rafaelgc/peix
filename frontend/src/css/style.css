@@ -148,7 +148,7 @@ input {
 
 .block {
     background-color: white;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .block-title {
