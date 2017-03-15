@@ -48,7 +48,7 @@
     </div>
     <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
         <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
-        <a class="left button" ng-class="{'toggled': offer.saved}" ng-click="saveOffer(offer)">Guardar</a>
+        <a class="left button" style="transition: width 1s" ng-class="{'toggled': offer.saved}" ng-click="saveOffer(offer)"><span ng-show="offer.saved">&#10004; Guardada</span><span ng-if="!offer.saved">Guardar</span></a>
         <input type="submit" class="right button" value="Ver en la web oficial">
         <div class="clear"></div>
     </form>

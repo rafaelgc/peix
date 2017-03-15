@@ -54,11 +54,12 @@
     <div class="popup block" ng-class="{'popup-open': showSavedOffersPopup}">
         <div class="block-title">Ofertas guardadas</div>
         <div class="block-content">
-            <div>
-                <div ng-repeat="offer in getSavedOffers()">
-                    <offer offer-data="offer"></offer>
-                    <div class="offer-vertical-separator" style="clear: both"></div>
-                </div>
+            <div style="text-align: center" ng-show="!getSavedOffers().length">
+                No tienes ofertas guardadas.
+            </div>
+            <div ng-repeat="offer in getSavedOffers()">
+                <offer offer-data="offer"></offer>
+                <div class="offer-vertical-separator" style="clear: both"></div>
             </div>
         </div>
     </div>
