@@ -11,11 +11,11 @@
     <header>
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
-        <span class="header-help" ng-click="showHelpPopup=true">?</span>
+        <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
     </header>
     <div class="content">
 
-        <div class="button-container">
+        <div class="button-container" id="top-button-container">
             <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
             <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
             <a class="right button" style="margin-right: 3px" ng-click="showSavedOffersPopup = !sjpwSavedOffersPopup">Ofertas guardadas</a>
@@ -52,7 +52,7 @@
 
     <div class="popup-base" ng-class="{'popup-open': showSavedOffersPopup}" ng-click="showSavedOffersPopup=false"></div>
     <div class="popup block" ng-class="{'popup-open': showSavedOffersPopup}">
-        <div class="block-title">Ofertas guardadas</div>
+        <div class="block-title">Ofertas guardadas<a ng-click="showSavedOffersPopup = false" style="float: right; cursor: pointer">X</a></div>
         <div class="block-content">
             <div style="text-align: center" ng-show="!getSavedOffers().length">
                 No tienes ofertas guardadas.
@@ -66,7 +66,7 @@
 
     <div class="popup-base" ng-class="{'popup-open': showStatsPopup}" ng-click="showStatsPopup=false"></div>
     <div class="popup block" ng-class="{'popup-open': showStatsPopup}">
-        <div class="block-title">Estadísticas</div>
+        <div class="block-title">Estadísticas<a ng-click="showStatsPopup = false" style="float: right; cursor: pointer">X</a></div>
         <div class="block-content">
             <div class="stats-title">Bolsa media</div>
             <div class="stats-attr">{{getAveragePay() | number : 2}}€/mes</div>
@@ -78,7 +78,7 @@
 
     <div class="popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
     <div class="popup block" ng-class="{'popup-open': showHelpPopup}">
-        <div class="block-title">Acerca de</div>
+        <div class="block-title">Acerca de<a ng-click="showHelpPopup = false" style="float: right; cursor: pointer">X</a></div>
         <div class="block-content">
             <div>
                 <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
