@@ -1,6 +1,5 @@
 angular.module('app', ['ngResource', 'common.directives.offer'])
-    .controller('AppController', ['$scope', 'appLogic', '$q', function ($scope, appLogic, $q) {
-
+    .controller('AppController', ['$scope', 'appLogic', '$window', function ($scope, appLogic, $window) {
         $scope.offers = appLogic.getOffers();
         $scope.filters = {};
 
@@ -35,8 +34,14 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
         $scope.clearFilters = function () {
             $scope.filters = {};
         };
+
+        $window.addEventListener('scroll', function () {
+            $scope.$apply(function () {
+                $scope.pageYOffset = $window.pageYOffset;
+            });
+        });
     }])
-    .factory('appLogic', ['$resource', '$window', function ($resource, $window) {
+    .factory('appLogic', ['$resource', '$window', '$document', function ($resource, $window, $document) {
 
         var Offer = $resource('http://localhost/peix/backend/get.php');
 
