@@ -5,6 +5,12 @@ html, body {
     background-color: #f6f6f6;
 }
 
+@media (max-width: 800px) {
+    body {
+        font-size: 130%;
+    }
+}
+
 * {
     box-sizing: border-box;
 }
@@ -14,6 +20,9 @@ header {
     color: white;
     padding: 20px;
     font-size: 160%;
+    position: fixed;
+    top: 0%;
+    width: 100%;
 }
 
 .header-help {
@@ -33,10 +42,23 @@ header {
     margin-left: 10px;
 }
 
+.up-arrow {
+    width: 0px;
+    transition: width 0.2s;
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    opacity: 0.5;
+}
+
+.up-arrow.visible {
+    width: 64px;
+}
+
 .content {
     padding: 20px 15px 25px 20px;
     max-width: 1024px;
-    margin: 15px auto;
+    margin: 80px auto 0px auto;
     background-color: white;
 }
 
