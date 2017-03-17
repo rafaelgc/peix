@@ -11,10 +11,10 @@
     <header>
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
-        <span class="header-help" style="font-weight: bold; margin-left: 5px" ng-show="pageYOffset > 200" ng-bind="'Subir'"></span>
+        <a href="#top" class="header-help" ng-show="pageYOffset > 200"><img style="margin-left: 20px" src="images/up-arrow.png" class="logo"></a>
         <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
     </header>
-    <div class="content">
+    <div name="top" class="content">
 
         <div class="button-container" id="top-button-container">
             <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>

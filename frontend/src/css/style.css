@@ -5,6 +5,12 @@ html, body {
     background-color: #f6f6f6;
 }
 
+@media (max-width: 800px) {
+    body {
+        font-size: 130%;
+    }
+}
+
 * {
     box-sizing: border-box;
 }
