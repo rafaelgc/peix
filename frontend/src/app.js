@@ -35,15 +35,24 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
             $scope.filters = {};
         };
 
+        $scope.goTop = function () {
+            $window.scrollTo(0, 0);
+        }
+
         $window.addEventListener('scroll', function () {
             $scope.$apply(function () {
                 $scope.pageYOffset = $window.pageYOffset;
             });
         });
-    }])
-    .factory('appLogic', ['$resource', '$window', '$document', function ($resource, $window, $document) {
 
-        var Offer = $resource('http://localhost/peix/backend/get.php');
+    }])
+    .factory('appLogic', ['$resource', '$window', '$location', function ($resource, $window, $location) {
+
+
+        var source = 'http://localhost/peix/backend/get.php';
+        //var source = $location.protocol() + "://" + $location.host() + "/api/get.php";
+
+        var Offer = $resource(source);
 
         //Se cargan los códigos de las ofertas que el usuario ha guardado.
         var saved = [];

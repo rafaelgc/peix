@@ -42,6 +42,19 @@ header {
     margin-left: 10px;
 }
 
+.up-arrow {
+    width: 0px;
+    transition: width 0.2s;
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    opacity: 0.5;
+}
+
+.up-arrow.visible {
+    width: 64px;
+}
+
 .content {
     padding: 20px 15px 25px 20px;
     max-width: 1024px;

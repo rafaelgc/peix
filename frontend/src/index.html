@@ -8,10 +8,10 @@
     <link rel="icon" type="image/png" href="images/logo.png">
 </head>
 <body>
+    <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
     <header>
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
-        <a href="#top" class="header-help" ng-show="pageYOffset > 200"><img style="margin-left: 20px" src="images/up-arrow.png" class="logo"></a>
         <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
     </header>
     <div name="top" class="content">
