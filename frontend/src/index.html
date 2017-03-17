@@ -11,9 +11,10 @@
     <header>
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
+        <a href="#top" class="header-help" ng-show="pageYOffset > 200"><img style="margin-left: 20px" src="images/up-arrow.png" class="logo"></a>
         <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
     </header>
-    <div class="content">
+    <div name="top" class="content">
 
         <div class="button-container" id="top-button-container">
             <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
@@ -89,7 +90,7 @@
             </div>
             <div class="title">Contacto</div>
             <p>
-                contact@peix.info
+                contact@peix
             </p>
             <div class="title">Créditos</div>
             <div>
@@ -99,7 +100,7 @@
             <div class="title">Tecnología y código</div>
             <div>
                 <p>peix está desarrollado con AngularJS y PHP. Utiliza una base de datos Redis para almacenar las ofertas.</p>
-                <p>Puedes acceder al código desde el repositorio de <a href="https://bitbucket.org/RafaG/peix">Bitbucket</a>.</p>
+                <p>Puedes acceder al código desde el repositorio de <a href="https://github.com/rafaelgc/peix">Github</a>.</p>
             </div>
         </div>
     </div>
