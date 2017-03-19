@@ -7,7 +7,7 @@ html, body {
 
 @media (max-width: 800px) {
     body {
-        font-size: 130%;
+        font-size: 110%;
     }
 }
 
@@ -23,6 +23,13 @@ header {
     position: fixed;
     top: 0%;
     width: 100%;
+}
+
+@media (max-width: 800px) {
+    header {
+        padding: 10px;
+    }
+
 }
 
 .header-help {
@@ -110,6 +117,7 @@ h2 {
     box-shadow: 0px 4px 5px -3px rgba(0,0,0,0.75);
     transition: background-color 0.2s, box-shadow 0.2s;
     text-decoration: none;
+    margin-bottom: 3px;
 }
 
 .button:hover {
