@@ -99,6 +99,10 @@ h2 {
     display: inline-block;
 }
 
+.offer-label-value {
+    color: #00392b;
+}
+
 .offer-profile-title {
     margin: 5px 0px 3px 0px;
 }
