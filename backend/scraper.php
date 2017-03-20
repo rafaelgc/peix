@@ -43,6 +43,7 @@ function runScraper($redisClient) {
         $newOffer->setPay($pay);
         $newOffer->setTasks(trim($rows[6]->find('td')[1]->plaintext));
         $newOffer->setProfile(trim($rows[7]->find('td')[1]->plaintext));
+        $newOffer->setPfc(trim($rows[5]->find('td')[1]->plaintext));
 
         //Pero otra parte hay que obtenerla de la página de la oferta. Por eso, para cada oferta listada en la página
         //principal se hará una nueva petición (POST) para obtener más datos de la oferta.
@@ -73,6 +74,7 @@ function runScraper($redisClient) {
         $newOffer->setWorkingDay(trim($detailsRows[7]->find('td')[1]->plaintext));
         $newOffer->setVacancies(intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
         $newOffer->setObservations(trim($detailsRows[11]->find('td')[1]->plaintext));
+        $newOffer->setContinuity(trim($detailsRows[9]->find('td')[1]->plaintext));
 
 
         array_push($offerList, $newOffer);
