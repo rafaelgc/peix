@@ -19,11 +19,22 @@ function needsUpdate($redisClient) {
 }
 
 function runScraper($redisClient) {
+
+    //Se obtiene la lista de ofertas. Esto permitirá ver si, desde la última actualización,
+    //se ha publicado alguna oferta nueva y, de ser así, se añade.
+    $offersList = $redisClient->get('peix.offers');
+    $lastOfferId = 0;
+    if ($offersList !== null) {
+        $offersList = json_decode($offersList, true);
+        $lastOfferId = intval($offersList[0]['code']); //Se toma la última oferta publicada.
+    }
+    else {
+        $offersList = array();
+    }
+
     $html = file_get_html('https://www.inf.upv.es/int/peix/alumnos/listado_ofertas.php');
 
     $offers = $html->find('table[class=tabla_base]');
-
-    $offerList = array();
 
     foreach ($offers as &$offer) {
         $newOffer = new Offer();
@@ -33,8 +44,36 @@ function runScraper($redisClient) {
         $pay = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
 
         //Una parte de la información se puede extraer de la página principal...
-
         $newOffer->setCode(intval(trim($rows[0]->find('td')[3]->plaintext)));
+
+
+        //Conocido el código de la oferta, consultaremos si ya la teníamos guardada para evitar tener que hacer
+        //la consulta adicional. Notar que, haciendo esto, impediríamos que las actualizaciones hechas sobre
+        //las ofertas se vieran reflejadas en esta aplicación.
+        //Notar también que las ofertas NO están guardadas ordenadamente en función de su identificador, por tanto,
+        //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
+        $forceNext = false;
+        foreach ($offersList as &$off) {
+            if ($newOffer->getCode() == $off['code']) {
+                $forceNext = true;
+                break;
+            }
+        }
+
+        if ($forceNext) {
+            continue;
+        }
+        else {
+            echo 'HACE FALTA ACTUALIZAR ' . $newOffer->getCode() . '<br>';
+        }
+
+        /*if ($lastOfferId >= ) {
+            break;
+        }
+        else {
+            echo 'HACE FALTA ACTUALIZAR ' . $newOffer->getCode() . '<br>';
+        }*/
+
         $newOffer->setPublicationDate(trim($rows[0]->find('td')[1]->plaintext));
         $newOffer->setCompany(trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
         $newOffer->setLocation(trim($rows[2]->find('td')[1]->plaintext));
@@ -45,7 +84,7 @@ function runScraper($redisClient) {
         $newOffer->setProfile(trim($rows[7]->find('td')[1]->plaintext));
         $newOffer->setPfc(trim($rows[5]->find('td')[1]->plaintext));
 
-        //Pero otra parte hay que obtenerla de la página de la oferta. Por eso, para cada oferta listada en la página
+        //Otra parte de la información hay que obtenerla de la página de la oferta. Por eso, para cada oferta listada en la página
         //principal se hará una nueva petición (POST) para obtener más datos de la oferta.
 
         $opts = array('http' =>
@@ -76,11 +115,10 @@ function runScraper($redisClient) {
         $newOffer->setObservations(trim($detailsRows[11]->find('td')[1]->plaintext));
         $newOffer->setContinuity(trim($detailsRows[9]->find('td')[1]->plaintext));
 
-
-        array_push($offerList, $newOffer);
+        array_unshift($offersList, $newOffer);
     }
 
-    $res = json_encode($offerList);
+    $res = json_encode($offersList);
 
     $redisClient->set('peix.offers', $res);
     $redisClient->set('peix.lastUpdate', time());
