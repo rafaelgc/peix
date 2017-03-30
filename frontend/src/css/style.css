@@ -5,6 +5,12 @@ html, body {
     background-color: #f6f6f6;
 }
 
+@media (max-width: 800px) {
+    body {
+        font-size: 110%;
+    }
+}
+
 * {
     box-sizing: border-box;
 }
@@ -14,6 +20,16 @@ header {
     color: white;
     padding: 20px;
     font-size: 160%;
+    position: fixed;
+    top: 0%;
+    width: 100%;
+}
+
+@media (max-width: 800px) {
+    header {
+        padding: 10px;
+    }
+
 }
 
 .header-help {
@@ -33,10 +49,23 @@ header {
     margin-left: 10px;
 }
 
+.up-arrow {
+    width: 0px;
+    transition: width 0.2s;
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    opacity: 0.5;
+}
+
+.up-arrow.visible {
+    width: 64px;
+}
+
 .content {
     padding: 20px 15px 25px 20px;
     max-width: 1024px;
-    margin: 15px auto;
+    margin: 80px auto 0px auto;
     background-color: white;
 }
 
@@ -70,6 +99,10 @@ h2 {
     display: inline-block;
 }
 
+.offer-label-value {
+    color: #00392b;
+}
+
 .offer-profile-title {
     margin: 5px 0px 3px 0px;
 }
@@ -88,6 +121,7 @@ h2 {
     box-shadow: 0px 4px 5px -3px rgba(0,0,0,0.75);
     transition: background-color 0.2s, box-shadow 0.2s;
     text-decoration: none;
+    margin-bottom: 3px;
 }
 
 .button:hover {

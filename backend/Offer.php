@@ -8,7 +8,7 @@
  */
 class Offer {
 
-    public $code, $publicationDate, $start, $location, $pay, $duration, $hours, $profile, $tasks, $company, $description, $observations, $workingDay, $vacancies;
+    public $code, $publicationDate, $start, $location, $pay, $duration, $hours, $profile, $tasks, $company, $description, $observations, $workingDay, $vacancies, $pfc, $continuity;
 
     /**
      * @return mixed
@@ -224,6 +224,31 @@ class Offer {
         $this->code = $code;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPfc() {
+        return $this->pfc;
+    }
 
+    /**
+     * @param mixed $pfc
+     */
+    public function setPfc($pfc) {
+        $this->pfc = $pfc;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getContinuity() {
+        return $this->continuity;
+    }
+
+    /**
+     * @param mixed $continuity
+     */
+    public function setContinuity($continuity) {
+        $this->continuity = $continuity;
+    }
 }

@@ -1,6 +1,5 @@
 angular.module('app', ['ngResource', 'common.directives.offer'])
-    .controller('AppController', ['$scope', 'appLogic', '$q', function ($scope, appLogic, $q) {
-
+    .controller('AppController', ['$scope', 'appLogic', '$window', function ($scope, appLogic, $window) {
         $scope.offers = appLogic.getOffers();
         $scope.filters = {};
 
@@ -35,10 +34,25 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
         $scope.clearFilters = function () {
             $scope.filters = {};
         };
-    }])
-    .factory('appLogic', ['$resource', '$window', function ($resource, $window) {
 
-        var Offer = $resource('http://localhost/peix/backend/get.php');
+        $scope.goTop = function () {
+            $window.scrollTo(0, 0);
+        }
+
+        $window.addEventListener('scroll', function () {
+            $scope.$apply(function () {
+                $scope.pageYOffset = $window.pageYOffset;
+            });
+        });
+
+    }])
+    .factory('appLogic', ['$resource', '$window', '$location', function ($resource, $window, $location) {
+
+
+        var source = 'http://localhost/peix/backend/get.php'; //Develop
+        //var source = $location.protocol() + "://" + $location.host() + "/api/get.php"; //Production
+
+        var Offer = $resource(source);
 
         //Se cargan los códigos de las ofertas que el usuario ha guardado.
         var saved = [];
