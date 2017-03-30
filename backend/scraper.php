@@ -7,9 +7,8 @@
  */
 include_once 'external/simple_html_dom.php';
 require_once __DIR__ . '/vendor/autoload.php';
-include_once 'Offer.php';
 
-define('UPDATE_MIN_TIME', 60); //Minutos.
+define('UPDATE_MIN_TIME', 5); //Minutos.
 
 ini_set('display_errors', 1);
 
@@ -37,14 +36,14 @@ function runScraper($redisClient) {
     $offers = $html->find('table[class=tabla_base]');
 
     foreach ($offers as &$offer) {
-        $newOffer = new Offer();
+        $newOffer = array();
 
         $rows = $offer->find('tr');
 
         $pay = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
 
         //Una parte de la información se puede extraer de la página principal...
-        $newOffer->setCode(intval(trim($rows[0]->find('td')[3]->plaintext)));
+        $newOffer['code'] = (intval(trim($rows[0]->find('td')[3]->plaintext)));
 
 
         //Conocido el código de la oferta, consultaremos si ya la teníamos guardada para evitar tener que hacer
@@ -54,7 +53,7 @@ function runScraper($redisClient) {
         //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
         $forceNext = false;
         foreach ($offersList as &$off) {
-            if ($newOffer->getCode() == $off['code']) {
+            if ($newOffer['code'] == $off['code']) {
                 $forceNext = true;
                 break;
             }
@@ -63,26 +62,16 @@ function runScraper($redisClient) {
         if ($forceNext) {
             continue;
         }
-        else {
-            echo 'HACE FALTA ACTUALIZAR ' . $newOffer->getCode() . '<br>';
-        }
 
-        /*if ($lastOfferId >= ) {
-            break;
-        }
-        else {
-            echo 'HACE FALTA ACTUALIZAR ' . $newOffer->getCode() . '<br>';
-        }*/
-
-        $newOffer->setPublicationDate(trim($rows[0]->find('td')[1]->plaintext));
-        $newOffer->setCompany(trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
-        $newOffer->setLocation(trim($rows[2]->find('td')[1]->plaintext));
-        $newOffer->setStart(trim($rows[3]->find('td')[1]->plaintext));
-        $newOffer->setHours(trim($rows[4]->find('td')[1]->plaintext));
-        $newOffer->setPay($pay);
-        $newOffer->setTasks(trim($rows[6]->find('td')[1]->plaintext));
-        $newOffer->setProfile(trim($rows[7]->find('td')[1]->plaintext));
-        $newOffer->setPfc(trim($rows[5]->find('td')[1]->plaintext));
+        $newOffer['publicationDate'] = (trim($rows[0]->find('td')[1]->plaintext));
+        $newOffer['company'] = (trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
+        $newOffer['location'] = (trim($rows[2]->find('td')[1]->plaintext));
+        $newOffer['start'] = (trim($rows[3]->find('td')[1]->plaintext));
+        $newOffer['hours'] = (trim($rows[4]->find('td')[1]->plaintext));
+        $newOffer['pay'] = ($pay);
+        $newOffer['tasks'] = (trim($rows[6]->find('td')[1]->plaintext));
+        $newOffer['profile'] = (trim($rows[7]->find('td')[1]->plaintext));
+        $newOffer['pfc'] = (trim($rows[5]->find('td')[1]->plaintext));
 
         //Otra parte de la información hay que obtenerla de la página de la oferta. Por eso, para cada oferta listada en la página
         //principal se hará una nueva petición (POST) para obtener más datos de la oferta.
@@ -91,7 +80,7 @@ function runScraper($redisClient) {
             array(
                 'method'  => 'POST',
                 'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
-                'content' => 'codigo_oferta=' . $newOffer->getCode(),
+                'content' => 'codigo_oferta=' . $newOffer['code'],
                 'timeout' => 10
             )
         );
@@ -108,12 +97,12 @@ function runScraper($redisClient) {
 
         $duration = intval(explode(' ', trim($detailsRows[6]->find('td')[1]->plaintext))[0]);
 
-        $newOffer->setDescription(trim($detailsRows[3]->find('td')[1]->plaintext));
-        $newOffer->setDuration($duration);
-        $newOffer->setWorkingDay(trim($detailsRows[7]->find('td')[1]->plaintext));
-        $newOffer->setVacancies(intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
-        $newOffer->setObservations(trim($detailsRows[11]->find('td')[1]->plaintext));
-        $newOffer->setContinuity(trim($detailsRows[9]->find('td')[1]->plaintext));
+        $newOffer['description'] = (trim($detailsRows[3]->find('td')[1]->plaintext));
+        $newOffer['duration'] = ($duration);
+        $newOffer['workingDay'] = (trim($detailsRows[7]->find('td')[1]->plaintext));
+        $newOffer['vacancies'] = (intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
+        $newOffer['observactions'] = (trim($detailsRows[11]->find('td')[1]->plaintext));
+        $newOffer['continuity'] = (trim($detailsRows[9]->find('td')[1]->plaintext));
 
         array_unshift($offersList, $newOffer);
     }

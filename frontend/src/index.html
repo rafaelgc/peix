@@ -11,7 +11,7 @@
 </head>
 <body>
     <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
-    <header>
+    <header ng-class="{'small': pageYOffset > 200}">
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
         <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>

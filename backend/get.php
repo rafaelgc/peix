@@ -20,9 +20,7 @@ $value = $client->get('peix.offers');
 //Si la última actualización es muy antigua o, directamente, nunca se ejecutó
 //el scraper, se ejecuta. No obstante, el usuario obtendrá el resultado viejo.
 
-//runScraper($client);
-
-if (/*false && */needsUpdate($client)) {
+if (needsUpdate($client)) {
     //shell_exec('php run-scraper.php &');
     shell_exec('php run-scraper.php > /dev/null 2>&1 &');
 }
