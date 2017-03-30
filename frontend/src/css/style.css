@@ -23,6 +23,11 @@ header {
     position: fixed;
     top: 0%;
     width: 100%;
+    transition: padding 0.5s;
+}
+
+.small {
+    padding: 5px;
 }
 
 @media (max-width: 800px) {
