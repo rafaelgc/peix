@@ -4,7 +4,7 @@
     <div class="offer-body">
         <div class="offer-label">
             <span class="offer-label-name">Inicio:</span>
-            <span class="offer-label-value">{{offer.start | date : 'd/M/y'}} {{offer.expired}}</span>
+            <span class="offer-label-value">{{offer.start | date : 'd/M/y'}}<span ng-if="offer.expired"> | La práctica ya ha comenzado.</span>
         </div>
 
         <div class="offer-label">

@@ -78,8 +78,6 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                         data[i].publicationDate = api.adjustFromServer(api.newDate(data[i].publicationDate));
                         data[i].expired = now > data[i].start.getTime();
 
-                        console.log(now + "      " + data[i].start.getTime());
-
                         for (var j = 0; j < saved.length; j++) {
                             if (data[i].code == saved[j]) {
                                 data[i].saved = true;
@@ -107,7 +105,7 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                     matching = matching && (unset(filters.maxMonths) || parseInt(offer.duration) <= filters.maxMonths);
                     matching = matching && (unset(filters.minHours) || parseInt(offer.hours) >= filters.minHours);
                     matching = matching && (unset(filters.maxHours) || parseInt(offer.hours) <= filters.maxHours);
-
+                    matching = matching && (unset(filters.hideExpired) || filters.hideExpired === false || filters.hideExpired === true && offer.expired === false);
                     if (matching) {
                         fOffers.push(offer);
                     }
