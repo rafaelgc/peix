@@ -11,7 +11,7 @@
 </head>
 <body>
     <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
-    <header>
+    <header ng-class="{'small': pageYOffset > 200}">
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
         <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
@@ -35,6 +35,9 @@
             </div>
             <div class="form-block">
                 <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
+            </div>
+            <div class="form-block">
+                <label>Ocultar ofertas expiradas <input ng-model="filters.hideExpired" type="checkbox"></label>
             </div>
         </div>
 
@@ -95,6 +98,8 @@
                 <p>Programación y diseño: Rafael González Carrizo</p>
                 <p>Iconos diseñados por <a href='http://www.freepik.com/free-vector/fish-icons-collection_1069735.htm'>Freepik</a></p>
             </div>
+            <div class="title">Contacto</div>
+            <p>contact @ peixupv . es</p>
             <div class="title">Tecnología y código</div>
             <div>
                 <p>peix está desarrollado con AngularJS y PHP. Utiliza una base de datos Redis para almacenar las ofertas.</p>

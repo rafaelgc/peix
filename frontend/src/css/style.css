@@ -23,6 +23,12 @@ header {
     position: fixed;
     top: 0%;
     width: 100%;
+    transition: padding 0.5s, opacity 0.5s;
+}
+
+.small {
+    padding: 5px 20px 5px 20px;
+    opacity: 0.7;
 }
 
 @media (max-width: 800px) {
@@ -81,11 +87,12 @@ h2 {
     padding: 0px;
 }
 
-.offers {
-}
-
 .offer {
     padding: 20px 0px 15px 0px;
+}
+
+.offer.expired {
+    opacity: 0.5;
 }
 
 .offer-subtitle {
