@@ -12,6 +12,11 @@ define('UPDATE_MIN_TIME', 5); //Minutos.
 
 ini_set('display_errors', 1);
 
+function changeDateFormat($date) {
+    $date = DateTime::createFromFormat('d-m-Y', $date);
+    return $date->format('Y-m-d');
+}
+
 function needsUpdate($redisClient) {
     $lastUpdate = $redisClient->get('peix.lastUpdate');
     return $lastUpdate === null || (time() - intval($lastUpdate) > UPDATE_MIN_TIME * 60);
@@ -63,10 +68,10 @@ function runScraper($redisClient) {
             continue;
         }
 
-        $newOffer['publicationDate'] = (trim($rows[0]->find('td')[1]->plaintext));
+        $newOffer['publicationDate'] = changeDateFormat(trim($rows[0]->find('td')[1]->plaintext));
         $newOffer['company'] = (trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
         $newOffer['location'] = (trim($rows[2]->find('td')[1]->plaintext));
-        $newOffer['start'] = (trim($rows[3]->find('td')[1]->plaintext));
+        $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
         $newOffer['hours'] = (trim($rows[4]->find('td')[1]->plaintext));
         $newOffer['pay'] = ($pay);
         $newOffer['tasks'] = (trim($rows[6]->find('td')[1]->plaintext));

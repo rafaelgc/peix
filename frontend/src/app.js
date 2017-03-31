@@ -65,13 +65,21 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
             return attr === undefined || attr === null || attr === "";
         }
 
-        return {
+        var api = {
             getOffers: function () {
                 var offers = Offer.query();
+                var now = (new Date()).getTime();
 
                 //Marcar como guardados aquellos que el usuario ha guardado.
                 offers.$promise.then(function (data) {
                     for (var i = 0; i < data.length; i++) {
+
+                        data[i].start = api.adjustFromServer(api.newDate(data[i].start));
+                        data[i].publicationDate = api.adjustFromServer(api.newDate(data[i].publicationDate));
+                        data[i].expired = now > data[i].start.getTime();
+
+                        console.log(now + "      " + data[i].start.getTime());
+
                         for (var j = 0; j < saved.length; j++) {
                             if (data[i].code == saved[j]) {
                                 data[i].saved = true;
@@ -79,6 +87,11 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                             }
                         }
                     }
+
+                    data = data.reverse();
+
+                    return data;
+
                 });
 
                 return offers;
@@ -116,6 +129,24 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                 return sOffers;
             },
 
+            newDate: function (ymdDate) {
+                if (ymdDate === null || ymdDate === undefined) return null;
+
+                var d = ymdDate.split("-");
+                var date = new Date(d[0], d[1] - 1, d[2]);
+                date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+                return date;
+            },
+
+            adjustFromServer: function (date) {
+                if (date) {
+                    date.setTime(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                }
+                return date;
+            }
+
         };
+
+        return api;
 
     }]);

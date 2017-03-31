@@ -87,11 +87,12 @@ h2 {
     padding: 0px;
 }
 
-.offers {
-}
-
 .offer {
     padding: 20px 0px 15px 0px;
+}
+
+.offer.expired {
+    opacity: 0.5;
 }
 
 .offer-subtitle {
