@@ -27,10 +27,8 @@ function runScraper($redisClient) {
     //Se obtiene la lista de ofertas. Esto permitirá ver si, desde la última actualización,
     //se ha publicado alguna oferta nueva y, de ser así, se añade.
     $offersList = $redisClient->get('peix.offers');
-    $lastOfferId = 0;
     if ($offersList !== null) {
         $offersList = json_decode($offersList, true);
-        $lastOfferId = intval($offersList[0]['code']); //Se toma la última oferta publicada.
     }
     else {
         $offersList = array();
@@ -39,6 +37,7 @@ function runScraper($redisClient) {
     $html = file_get_html('https://www.inf.upv.es/int/peix/alumnos/listado_ofertas.php');
 
     $offers = $html->find('table[class=tabla_base]');
+    $newOffers = array();
 
     foreach ($offers as &$offer) {
         $newOffer = array();
@@ -56,15 +55,15 @@ function runScraper($redisClient) {
         //las ofertas se vieran reflejadas en esta aplicación.
         //Notar también que las ofertas NO están guardadas ordenadamente en función de su identificador, por tanto,
         //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
-        $forceNext = false;
+        $ignoreOffer = false;
         foreach ($offersList as &$off) {
             if ($newOffer['code'] == $off['code']) {
-                $forceNext = true;
+                $ignoreOffer = true;
                 break;
             }
         }
 
-        if ($forceNext) {
+        if ($ignoreOffer) {
             continue;
         }
 
@@ -109,8 +108,10 @@ function runScraper($redisClient) {
         $newOffer['observactions'] = (trim($detailsRows[11]->find('td')[1]->plaintext));
         $newOffer['continuity'] = (trim($detailsRows[9]->find('td')[1]->plaintext));
 
-        array_unshift($offersList, $newOffer);
+        array_push($newOffers, $newOffer);
     }
+
+    $offersList = $newOffers + $offersList;
 
     $res = json_encode($offersList);
 
