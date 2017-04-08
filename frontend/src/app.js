@@ -86,7 +86,7 @@ angular.module('app', ['ngResource', 'common.directives.offer'])
                         }
                     }
 
-                    data = data.reverse();
+                    //data = data.reverse();
 
                     return data;
 
