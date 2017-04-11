@@ -48,7 +48,6 @@ function runScraper($redisClient) {
 
         //Una parte de la información se puede extraer de la página principal...
         $newOffer['code'] = (intval(trim($rows[0]->find('td')[3]->plaintext)));
-
         $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
 
 
