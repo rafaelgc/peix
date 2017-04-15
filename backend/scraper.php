@@ -8,7 +8,7 @@
 include_once 'external/simple_html_dom.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('UPDATE_MIN_TIME', 5); //Minutos.
+define('UPDATE_MIN_TIME', 0); //Minutos.
 
 ini_set('display_errors', 1);
 
