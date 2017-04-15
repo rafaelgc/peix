@@ -12,6 +12,11 @@ define('UPDATE_MIN_TIME', 0); //Minutos.
 
 ini_set('display_errors', 1);
 
+function changeDateFormat($date) {
+    $date = DateTime::createFromFormat('d-m-Y', $date);
+    return $date->format('Y-m-d');
+}
+
 function needsUpdate($redisClient) {
     $lastUpdate = $redisClient->get('peix.lastUpdate');
     return $lastUpdate === null || (time() - intval($lastUpdate) > UPDATE_MIN_TIME * 60);
@@ -22,10 +27,8 @@ function runScraper($redisClient) {
     //Se obtiene la lista de ofertas. Esto permitirá ver si, desde la última actualización,
     //se ha publicado alguna oferta nueva y, de ser así, se añade.
     $offersList = $redisClient->get('peix.offers');
-    $lastOfferId = 0;
     if ($offersList !== null) {
         $offersList = json_decode($offersList, true);
-        $lastOfferId = intval($offersList[0]['code']); //Se toma la última oferta publicada.
     }
     else {
         $offersList = array();
@@ -34,6 +37,7 @@ function runScraper($redisClient) {
     $html = file_get_html('https://www.inf.upv.es/int/peix/alumnos/listado_ofertas.php');
 
     $offers = $html->find('table[class=tabla_base]');
+    $newOffers = array();
 
     foreach ($offers as &$offer) {
         $newOffer = array();
@@ -44,6 +48,7 @@ function runScraper($redisClient) {
 
         //Una parte de la información se puede extraer de la página principal...
         $newOffer['code'] = (intval(trim($rows[0]->find('td')[3]->plaintext)));
+        $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
 
 
         //Conocido el código de la oferta, consultaremos si ya la teníamos guardada para evitar tener que hacer
@@ -51,22 +56,23 @@ function runScraper($redisClient) {
         //las ofertas se vieran reflejadas en esta aplicación.
         //Notar también que las ofertas NO están guardadas ordenadamente en función de su identificador, por tanto,
         //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
-        $forceNext = false;
+        $ignoreOffer = false;
         foreach ($offersList as &$off) {
-            if ($newOffer['code'] == $off['code']) {
-                $forceNext = true;
+            //Poniendo $newOffer['start'] === $off['start'] se puede conseguir que dos ofertas
+            //con el mismo código puedan actualizarse si sus fechas de inicio son distintas.
+            if ($newOffer['code'] == $off['code'] && $newOffer['start'] === $off['start']) {
+                $ignoreOffer = true;
                 break;
             }
         }
 
-        if ($forceNext) {
+        if ($ignoreOffer) {
             continue;
         }
 
-        $newOffer['publicationDate'] = (trim($rows[0]->find('td')[1]->plaintext));
+        $newOffer['publicationDate'] = changeDateFormat(trim($rows[0]->find('td')[1]->plaintext));
         $newOffer['company'] = (trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
         $newOffer['location'] = (trim($rows[2]->find('td')[1]->plaintext));
-        $newOffer['start'] = (trim($rows[3]->find('td')[1]->plaintext));
         $newOffer['hours'] = (trim($rows[4]->find('td')[1]->plaintext));
         $newOffer['pay'] = ($pay);
         $newOffer['tasks'] = (trim($rows[6]->find('td')[1]->plaintext));
@@ -104,8 +110,10 @@ function runScraper($redisClient) {
         $newOffer['observactions'] = (trim($detailsRows[11]->find('td')[1]->plaintext));
         $newOffer['continuity'] = (trim($detailsRows[9]->find('td')[1]->plaintext));
 
-        array_unshift($offersList, $newOffer);
+        array_push($newOffers, $newOffer);
     }
+
+    $offersList = $newOffers + $offersList;
 
     $res = json_encode($offersList);
 
