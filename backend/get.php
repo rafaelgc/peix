@@ -5,7 +5,8 @@
  * Date: 3/14/17
  * Time: 11:58 PM
  */
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
+header('Content-type: application/json; charset=utf-8');
 
 $result = array();
 

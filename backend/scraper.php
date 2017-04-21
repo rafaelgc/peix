@@ -10,7 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 define('UPDATE_MIN_TIME', 5); //Minutos.
 
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 
 function changeDateFormat($date) {
     $date = DateTime::createFromFormat('d-m-Y', $date);
@@ -113,7 +113,9 @@ function runScraper($redisClient) {
         array_push($newOffers, $newOffer);
     }
 
-    $offersList = $newOffers + $offersList;
+    for ($i = count($newOffers) - 1; $i >= 0; $i--) {
+        array_unshift($offersList, $newOffers[$i]);
+    }
 
     $res = json_encode($offersList);
 
