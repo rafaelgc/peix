@@ -10,7 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 define('UPDATE_MIN_TIME', 5); //Minutos.
 
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 
 function changeDateFormat($date) {
     $date = DateTime::createFromFormat('d-m-Y', $date);
