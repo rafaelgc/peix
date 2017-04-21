@@ -111,7 +111,9 @@ function runScraper($redisClient) {
         array_push($newOffers, $newOffer);
     }
 
-    $offersList = $newOffers + $offersList;
+    for ($i = count($newOffers) - 1; $i >= 0; $i--) {
+        array_unshift($offersList, $newOffers[$i]);
+    }
 
     $res = json_encode($offersList);
 
