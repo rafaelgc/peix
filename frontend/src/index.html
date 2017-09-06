@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>peix - Prácticas en empresa - ETSINF UPV</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Web no oficial para consultar las ofertas de prácticas de la Escuela Técnica Superior de Ingeniería Informática de la UPV.">
+
 </head>
 <body>
     <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
     <header ng-class="{'small': pageYOffset > 200}">
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
-        <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
+        <span class="header-help modal-trigger" href="#about-modal">acerca de</span>
     </header>
     <div name="top" class="content">
 
         <div class="button-container" id="top-button-container">
-            <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
-            <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
-            <a class="right button" style="margin-right: 3px" ng-click="showSavedOffersPopup = !sjpwSavedOffersPopup">Ofertas guardadas</a>
-            <a class="right button" style="margin-right: 3px" ng-click="showStatsPopup = !showStatsPopup">Estadísticas</a>
+            <a class="left btn waves-effect" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
+            <a class="right btn waves-effect" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
+            <a class="right btn waves-effect modal-trigger" style="margin-right: 3px" href="#saved-offers-modal">Ofertas guardadas</a>
+            <a class="right btn waves-effect modal-trigger" style="margin-right: 3px" href="#stats-modal">Estadísticas</a>
             <div class="clear"></div>
         </div>
 
@@ -56,10 +58,11 @@
 
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showSavedOffersPopup}" ng-click="showSavedOffersPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showSavedOffersPopup}">
-        <div class="block-title">Ofertas guardadas<a ng-click="showSavedOffersPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <!---------- MODALS ------------>
+
+    <div id="saved-offers-modal" class="modal">
+        <div class="modal-content">
+            <h4>Ofertas guardadas</h4>
             <div style="text-align: center" ng-show="!getSavedOffers().length">
                 No tienes ofertas guardadas.
             </div>
@@ -68,24 +71,28 @@
                 <div class="offer-vertical-separator" style="clear: both"></div>
             </div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showStatsPopup}" ng-click="showStatsPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showStatsPopup}">
-        <div class="block-title">Estadísticas<a ng-click="showStatsPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <h4>Estadísticas</h4>
             <div class="stats-title">Bolsa media</div>
             <div class="stats-attr">{{getAveragePay() | number : 2}}€/mes</div>
 
             <div class="stats-title">Pago medio por hora</div>
             <div class="stats-attr">{{getAveragePayPerHour() | number : 2}}€/hora</div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showHelpPopup}">
-        <div class="block-title">Acerca de<a ng-click="showHelpPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <h4>Acerca de</h4>
             <div>
                 <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
 
@@ -102,15 +109,29 @@
             <p>contact @ peixupv . es</p>
             <div class="title">Tecnología y código</div>
             <div>
-                <p>peix está desarrollado con AngularJS y PHP. Utiliza una base de datos Redis para almacenar las ofertas.</p>
+                <p>peix está desarrollado con AngularJS y PHP. Usa MaterializeCSS. Utiliza una base de datos Redis para almacenar las ofertas.</p>
                 <p>Puedes acceder al código desde el repositorio de <a href="https://github.com/rafaelgc/peix">Github</a>.</p>
             </div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script src="app.js"></script>
     <script src="common/directives/offer/offer.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('.modal').modal();
+        });
+
+    </script>
 </body>
 </html>
 

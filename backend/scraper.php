@@ -24,8 +24,9 @@ function needsUpdate($redisClient) {
 
 function runScraper($redisClient) {
 
-    //Se obtiene la lista de ofertas. Esto permitirá ver si, desde la última actualización,
-    //se ha publicado alguna oferta nueva y, de ser así, se añade.
+    //Se obtiene la lista de ofertas que el sitema tiene actualmente en la base de datos.
+    //Esto permitirá ver si, desde la última actualización, se ha publicado alguna oferta nueva y, de ser así, se
+    //solicita su información.
     $offersList = $redisClient->get('peix.offers');
     if ($offersList !== null) {
         $offersList = json_decode($offersList, true);
@@ -44,10 +45,10 @@ function runScraper($redisClient) {
 
         $rows = $offer->find('tr');
 
-        $pay = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
-
         //Una parte de la información se puede extraer de la página principal...
         $newOffer['code'] = (intval(trim($rows[0]->find('td')[3]->plaintext)));
+        $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
+        $newOffer['publish'] = changeDateFormat(trim($rows[0]->find('td')[1]->plaintext));
 
 
         //Conocido el código de la oferta, consultaremos si ya la teníamos guardada para evitar tener que hacer
@@ -56,9 +57,19 @@ function runScraper($redisClient) {
         //Notar también que las ofertas NO están guardadas ordenadamente en función de su identificador, por tanto,
         //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
         $ignoreOffer = false;
-        foreach ($offersList as &$off) {
-            if ($newOffer['code'] == $off['code']) {
+
+        foreach ($offersList as $key => &$off) {
+            //Con $newOffer['start'] === $off['start'] se puede conseguir que dos ofertas
+            //con el mismo código puedan actualizarse si sus fechas de inicio son distintas.
+            if ($newOffer['code'] == $off['code'] && $newOffer['start'] === $off['start'] && $newOffer['publish'] === $off['publish']) {
                 $ignoreOffer = true;
+                break;
+            }
+
+            //Se si se encuentra una oferta con el mismo código pero distinta fecha de publicación
+            //significa que se ha actualizado. Hay que eliminar la vieja.
+            if ($newOffer['code'] == $off['code'] && $newOffer['publish'] != $off['publish']) {
+                unset($offersList[$key]);
                 break;
             }
         }
@@ -72,7 +83,7 @@ function runScraper($redisClient) {
         $newOffer['location'] = (trim($rows[2]->find('td')[1]->plaintext));
         $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
         $newOffer['hours'] = (trim($rows[4]->find('td')[1]->plaintext));
-        $newOffer['pay'] = ($pay);
+        $newOffer['pay'] = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
         $newOffer['tasks'] = (trim($rows[6]->find('td')[1]->plaintext));
         $newOffer['profile'] = (trim($rows[7]->find('td')[1]->plaintext));
         $newOffer['pfc'] = (trim($rows[5]->find('td')[1]->plaintext));
