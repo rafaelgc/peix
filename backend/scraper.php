@@ -48,11 +48,7 @@ function runScraper($redisClient) {
         //Una parte de la información se puede extraer de la página principal...
         $newOffer['code'] = (intval(trim($rows[0]->find('td')[3]->plaintext)));
         $newOffer['start'] = changeDateFormat(trim($rows[3]->find('td')[1]->plaintext));
-<<<<<<< HEAD
-=======
         $newOffer['publish'] = changeDateFormat(trim($rows[0]->find('td')[1]->plaintext));
->>>>>>> develop
-
 
         //Conocido el código de la oferta, consultaremos si ya la teníamos guardada para evitar tener que hacer
         //la consulta adicional. Notar que, haciendo esto, impediríamos que las actualizaciones hechas sobre
@@ -60,18 +56,11 @@ function runScraper($redisClient) {
         //Notar también que las ofertas NO están guardadas ordenadamente en función de su identificador, por tanto,
         //habrá que comprobar entre todas las ofertas si ya está guardada la "nueva" para verificar si realmente lo es.
         $ignoreOffer = false;
-<<<<<<< HEAD
-        foreach ($offersList as &$off) {
-            //Poniendo $newOffer['start'] === $off['start'] se puede conseguir que dos ofertas
-            //con el mismo código puedan actualizarse si sus fechas de inicio son distintas.
-            if ($newOffer['code'] == $off['code'] && $newOffer['start'] === $off['start']) {
-=======
 
         foreach ($offersList as $key => &$off) {
             //Con $newOffer['start'] === $off['start'] se puede conseguir que dos ofertas
             //con el mismo código puedan actualizarse si sus fechas de inicio son distintas.
             if ($newOffer['code'] == $off['code'] && $newOffer['start'] === $off['start'] && $newOffer['publish'] === $off['publish']) {
->>>>>>> develop
                 $ignoreOffer = true;
                 break;
             }
