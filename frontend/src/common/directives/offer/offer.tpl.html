@@ -1,10 +1,10 @@
 <div class="offer" ng-class="{'expired': offer.expired}">
     <h2 class="offer-title">{{offer.company}}</h2>
-    <h3 class="offer-subtitle">{{offer.tasks}}</h3>
     <div class="offer-body">
+        <h3 class="offer-subtitle">{{offer.tasks}}</h3>
         <div class="offer-label">
             <span class="offer-label-name">Inicio:</span>
-            <span class="offer-label-value">{{offer.start | date : 'd/M/y'}}<span ng-if="offer.expired"> | La práctica ya ha comenzado.</span>
+            <span class="offer-label-value">{{offer.start | date : 'd/M/y'}}<span ng-if="offer.expired"> | La práctica ya ha comenzado.</span></span>
         </div>
 
         <div class="offer-label">
@@ -41,26 +41,29 @@
             <span class="offer-label-name">Posibilidad de PFC:</span>
             <span class="offer-label-value">{{offer.pfc}}</span>
         </div>
-    </div>
-    <h3 class="offer-profile-title">Perfil</h3>
-    <div class="offer-profile-description">
-        {{offer.profile}}
-    </div>
 
-    <h3 class="offer-profile-title">Descripción</h3>
-    <div class="offer-profile-description">
-        {{offer.description}}
-    </div>
+        <h3 class="offer-profile-title">Perfil</h3>
+        <div class="offer-profile-description">
+            {{offer.profile}}
+        </div>
 
-    <h3 class="offer-profile-title">Observaciones</h3>
-    <div class="offer-profile-description">
-        {{offer.observations}}
+        <h3 class="offer-profile-title">Descripción</h3>
+        <div class="offer-profile-description">
+            {{offer.description}}
+        </div>
+
+        <div ng-if="offer.observations">
+            <h3 class="offer-profile-title">Observaciones</h3>
+            <div class="offer-profile-description">
+                {{offer.observations}}
+            </div>
+        </div>
+        <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
+            <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
+            <a ng-click="saveOffer(offer)" class="left btn" ng-if="offer.saved">&#10004; Guardada</a>
+            <a ng-click="saveOffer(offer)" class="left btn grey" ng-if="!offer.saved">Guardar</a>
+            <input type="submit" class="right btn-flat waves-effect waves-teal" value="Ver en la web oficial">
+            <div class="clear"></div>
+        </form>
     </div>
-    <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">
-        <input type="hidden" name="codigo_oferta" value="{{offer.code}}">
-        <a ng-click="saveOffer(offer)" class="left btn" ng-if="offer.saved">&#10004; Guardada</a>
-        <a ng-click="saveOffer(offer)" class="left btn grey" ng-if="!offer.saved">Guardar</a>
-        <input type="submit" class="right btn-flat waves-effect waves-teal" value="Ver en la web oficial">
-        <div class="clear"></div>
-    </form>
 </div>

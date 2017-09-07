@@ -2,7 +2,7 @@
 <html lang="es" ng-app="app" ng-controller="AppController">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>peix - Prácticas en empresa - ETSINF UPV</title>
@@ -13,38 +13,30 @@
 </head>
 <body>
     <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
-    <header ng-class="{'small': pageYOffset > 200}">
+    <!---<header ng-class="{'small': pageYOffset > 200}">
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
         <span class="header-help modal-trigger" href="#about-modal">acerca de</span>
-    </header>
+    </header>--->
+
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">
+                    <img src="images/logo.png" class="logo">
+                    <span class="header-name">peix</span>
+                </a>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="#filter-modal" class="modal-trigger waves-effect"><i class="material-icons">search</i></a></li>
+                    <li><a href="#stats-modal" class="modal-trigger waves-effect"><i class="material-icons">insert_chart</i></a></li>
+                    <li><a href="#saved-offers-modal" class="modal-trigger waves-effect"><i class="material-icons">save</i></a></li>
+                    <li><a href="#about-modal" class="modal-trigger waves-effect"><i class="material-icons">help_outline</i></a></li>
+                    <li><a href="https://www.inf.upv.es/int/peix/empresa/empresa.php" target="_blank" class="waves-effect waves-light btn red darken-1">Publicar oferta</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <div name="top" class="content">
-
-        <div class="button-container" id="top-button-container">
-            <a class="left btn waves-effect" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
-            <a class="right btn waves-effect" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
-            <a class="right btn waves-effect modal-trigger" style="margin-right: 3px" href="#saved-offers-modal">Ofertas guardadas</a>
-            <a class="right btn waves-effect modal-trigger" style="margin-right: 3px" href="#stats-modal">Estadísticas</a>
-            <div class="clear"></div>
-        </div>
-
-        <div ng-show="filtersVisible" style="margin-bottom: 25px">
-            <div class="form-block">
-                <label>Bolsa mínima: </label><input ng-model="filters.minPay" size="4" type="text">€
-            </div>
-            <div class="form-block">
-                <label>Duración: </label>desde <input size="2" type="text" ng-model="filters.minMonths"> hasta <input ng-model="filters.maxMonths" size="2" type="text"> meses
-            </div>
-            <div class="form-block">
-                <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
-            </div>
-            <div class="form-block">
-                <label>Ocultar ofertas expiradas <input ng-model="filters.hideExpired" type="checkbox"></label>
-            </div>
-        </div>
-
-        <h1>Listado de ofertas</h1>
-
         <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
         <div class="offers">
             <div ng-repeat="offer in getFilteredOffers()">
@@ -59,6 +51,94 @@
     </div>
 
     <!---------- MODALS ------------>
+
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
+            <h4>Filtrar</h4>
+            <div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field">
+                            <label>Bolsa mínima: </label>
+                            <input ng-model="filters.minPay" size="4" type="text" placeholder="€">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.minHours">
+                                <option value="">Desde...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                            </select>
+                            <label>Horas</label>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.maxHours">
+                                <option value="">Hasta...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.minMonths">
+                                <option value="">Desde...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option>
+                                <option value="11">11</option><option value="12">12</option>
+                            </select>
+                            <label>Meses</label>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.maxMonths">
+                                <option value="">Hasta...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option>
+                                <option value="11">11</option><option value="12">12</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--
+                <div class="form-block">
+                    <label>Duración: </label>desde <input size="2" type="text" ng-model="filters.minMonths"> hasta <input ng-model="filters.maxMonths" size="2" type="text"> meses
+                </div>
+                <div class="form-block">
+                    <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
+                </div>-->
+                <p>
+                    <input ng-model="filters.hideExpired" type="checkbox" class="filled-in" id="filled-in-box" />
+                    <label for="filled-in-box">Ocultar ofertas expiradas</label>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
+    </div>
 
     <div id="saved-offers-modal" class="modal">
         <div class="modal-content">
@@ -129,6 +209,7 @@
         $(document).ready(function(){
             // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
             $('.modal').modal();
+            $('select').material_select();
         });
 
     </script>
