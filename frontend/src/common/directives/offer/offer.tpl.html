@@ -2,29 +2,26 @@
     <h2 class="offer-title">{{offer.company}}</h2>
     <div class="offer-body">
         <h3 class="offer-subtitle">{{offer.tasks}}</h3>
-        <div class="offer-label">
-            <span class="offer-label-name">Inicio:</span>
-            <span class="offer-label-value">{{offer.start | date : 'd/M/y'}}<span ng-if="offer.expired"> | La práctica ya ha comenzado.</span></span>
-        </div>
 
-        <div class="offer-label">
-            <span class="offer-label-name">Duración:</span>
-            <span class="offer-label-value">{{offer.duration}} meses, {{offer.hours}} horas al día (aprox. {{calcECTS(offer)}} ECTS)</span>
-        </div>
-
-        <div class="offer-label">
-            <span class="offer-label-name">Jornada:</span>
-            <span class="offer-label-value">{{offer.workingDay}}</span>
+        <div class="row">
+            <div class="col s4 m4 offer-label-big">
+                <!--<div class="hide-on-med-and-up">Fecha de inicio</div>-->
+                <div class="main">{{offer.start | date : 'd/M/y'}}</div>
+                <div>Fecha de inicio</div>
+            </div>
+            <div class="col s4 m4 offer-label-big">
+                <div class="main">{{offer.duration}} meses</div>
+                <div>{{offer.hours}}h/día ({{offer.workingDay}})</div>
+                <div>(aprox. {{calcECTS(offer)}} ECTS)</div>
+            </div>
+            <div class="col s4 m4 offer-label-big">
+                <div class="main">{{offer.pay}}€/mes</div> (aprox. {{calcPayPerHour(offer) | number : 2}}€/hora)
+            </div>
         </div>
 
         <div class="offer-label">
             <span class="offer-label-name">Vacantes:</span>
             <span class="offer-label-value">{{offer.vacancies}}</span>
-        </div>
-
-        <div class="offer-label">
-            <span class="offer-label-name">Bolsa:</span>
-            <span class="offer-label-value">{{offer.pay}}€ (aprox. {{calcPayPerHour(offer) | number : 2}}€/hora)</span>
         </div>
 
         <div class="offer-label">
