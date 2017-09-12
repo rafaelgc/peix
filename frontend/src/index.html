@@ -26,16 +26,35 @@
                     <img src="images/logo.png" class="logo">
                     <span class="header-name">peix</span>
                 </a>
-                <ul id="nav-mobile" class="right">
+                <ul id="nav-mobile" class="right hide-on-small-only">
                     <li><a href="#filter-modal" class="modal-trigger waves-effect"><i class="material-icons">search</i></a></li>
                     <li><a href="#stats-modal" class="modal-trigger waves-effect"><i class="material-icons">insert_chart</i></a></li>
                     <li><a href="#saved-offers-modal" class="modal-trigger waves-effect"><i class="material-icons">save</i></a></li>
                     <li><a href="#about-modal" class="modal-trigger waves-effect"><i class="material-icons">help_outline</i></a></li>
                     <li><a href="https://www.inf.upv.es/int/peix/empresa/empresa.php" target="_blank" class="waves-effect waves-light btn red darken-1">Publicar oferta</a></li>
                 </ul>
+
+                <ul class="right hide-on-med-and-up">
+                    <li><a href="#filter-modal" class="modal-trigger waves-effect"><i class="material-icons">search</i></a></li>
+                    <li><a href='#' data-constrainwidth="false" data-beloworigin="true" data-activates='mobile-menu' class="dropdown-button waves-effect"><i class="material-icons">menu</i></a></li>
+                    <!---<li><a href="#filter-modal" class="modal-trigger waves-effect"><i class="material-icons">search</i></a></li>
+                    <li><a href="#stats-modal" class="modal-trigger waves-effect"><i class="material-icons">insert_chart</i></a></li>
+                    <li><a href="#saved-offers-modal" class="modal-trigger waves-effect"><i class="material-icons">save</i></a></li>
+                    <li><a href="#about-modal" class="modal-trigger waves-effect"><i class="material-icons">help_outline</i></a></li>
+                    <li><a href="https://www.inf.upv.es/int/peix/empresa/empresa.php" target="_blank" class="waves-effect waves-light btn red darken-1">Publicar oferta</a></li>
+                    --->
+                </ul>
             </div>
         </nav>
     </div>
+
+    <ul id='mobile-menu' class='dropdown-content'>
+        <li><a href="#saved-offers-modal" class="modal-trigger"><i class="material-icons">save</i>Ofertas guardadas</a></li>
+        <li><a href="#stats-modal" class="modal-trigger"><i class="material-icons">insert_chart</i>Estadísticas</a></li>
+        <li><a href="#about-modal" class="modal-trigger"><i class="material-icons">help_outline</i>Acerca de</a></li>
+        <li><a href="https://www.inf.upv.es/int/peix/empresa/empresa.php" target="_blank" class="modal-trigger"><i class="material-icons">publish</i>Publicar oferta</a></li>
+    </ul>
+
     <div name="top" class="content">
         <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
         <div class="offers">
