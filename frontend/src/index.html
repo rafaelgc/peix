@@ -2,47 +2,41 @@
 <html lang="es" ng-app="app" ng-controller="AppController">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>peix - Prácticas en empresa - ETSINF UPV</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Web no oficial para consultar las ofertas de prácticas de la Escuela Técnica Superior de Ingeniería Informática de la UPV.">
+
 </head>
 <body>
     <a href="#" ng-click="goTop()"><img class="up-arrow" ng-class="{'visible': pageYOffset > 200}" style="margin-left: 20px" src="images/up-arrow.png"></a>
-    <header ng-class="{'small': pageYOffset > 200}">
+    <!---<header ng-class="{'small': pageYOffset > 200}">
         <img src="images/logo.png" class="logo">
         <span class="header-name">peix</span>
-        <span class="header-help" ng-click="showHelpPopup=true">acerca de</span>
-    </header>
+        <span class="header-help modal-trigger" href="#about-modal">acerca de</span>
+    </header>--->
+
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">
+                    <img src="images/logo.png" class="logo">
+                    <span class="header-name">peix</span>
+                </a>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="#filter-modal" class="modal-trigger waves-effect"><i class="material-icons">search</i></a></li>
+                    <li><a href="#stats-modal" class="modal-trigger waves-effect"><i class="material-icons">insert_chart</i></a></li>
+                    <li><a href="#saved-offers-modal" class="modal-trigger waves-effect"><i class="material-icons">save</i></a></li>
+                    <li><a href="#about-modal" class="modal-trigger waves-effect"><i class="material-icons">help_outline</i></a></li>
+                    <li><a href="https://www.inf.upv.es/int/peix/empresa/empresa.php" target="_blank" class="waves-effect waves-light btn red darken-1">Publicar oferta</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <div name="top" class="content">
-
-        <div class="button-container" id="top-button-container">
-            <a class="left button" ng-class="{'toggled': filtersVisible}" ng-click="filtersVisible = !filtersVisible; clearFilters()">Filtros</a>
-            <a class="right button" target="_blank" href="https://www.inf.upv.es/int/peix/empresa/empresa.php">Publicar oferta</a>
-            <a class="right button" style="margin-right: 3px" ng-click="showSavedOffersPopup = !sjpwSavedOffersPopup">Ofertas guardadas</a>
-            <a class="right button" style="margin-right: 3px" ng-click="showStatsPopup = !showStatsPopup">Estadísticas</a>
-            <div class="clear"></div>
-        </div>
-
-        <div ng-show="filtersVisible" style="margin-bottom: 25px">
-            <div class="form-block">
-                <label>Bolsa mínima: </label><input ng-model="filters.minPay" size="4" type="text">€
-            </div>
-            <div class="form-block">
-                <label>Duración: </label>desde <input size="2" type="text" ng-model="filters.minMonths"> hasta <input ng-model="filters.maxMonths" size="2" type="text"> meses
-            </div>
-            <div class="form-block">
-                <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
-            </div>
-            <div class="form-block">
-                <label>Ocultar ofertas expiradas <input ng-model="filters.hideExpired" type="checkbox"></label>
-            </div>
-        </div>
-
-        <h1>Listado de ofertas</h1>
-
         <div style="text-align: center" ng-if="isLoading()">Cargando...</div>
         <div class="offers">
             <div ng-repeat="offer in getFilteredOffers()">
@@ -56,10 +50,99 @@
 
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showSavedOffersPopup}" ng-click="showSavedOffersPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showSavedOffersPopup}">
-        <div class="block-title">Ofertas guardadas<a ng-click="showSavedOffersPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <!---------- MODALS ------------>
+
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
+            <h4>Filtrar</h4>
+            <div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field">
+                            <label>Bolsa mínima: </label>
+                            <input ng-model="filters.minPay" size="4" type="text" placeholder="€">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.minHours">
+                                <option value="">Desde...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                            </select>
+                            <label>Horas</label>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.maxHours">
+                                <option value="">Hasta...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.minMonths">
+                                <option value="">Desde...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option>
+                                <option value="11">11</option><option value="12">12</option>
+                            </select>
+                            <label>Meses</label>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <select ng-model="filters.maxMonths">
+                                <option value="">Hasta...</option>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option>
+                                <option value="11">11</option><option value="12">12</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--
+                <div class="form-block">
+                    <label>Duración: </label>desde <input size="2" type="text" ng-model="filters.minMonths"> hasta <input ng-model="filters.maxMonths" size="2" type="text"> meses
+                </div>
+                <div class="form-block">
+                    <label>Horas por día: </label>desde <input ng-model="filters.minHours" size="2" type="text"> hasta <input ng-model="filters.maxHours" size="2" type="text"> horas
+                </div>-->
+                <p>
+                    <input ng-model="filters.hideExpired" type="checkbox" class="filled-in" id="filled-in-box" />
+                    <label for="filled-in-box">Ocultar ofertas expiradas</label>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
+    </div>
+
+    <div id="saved-offers-modal" class="modal">
+        <div class="modal-content">
+            <h4>Ofertas guardadas</h4>
             <div style="text-align: center" ng-show="!getSavedOffers().length">
                 No tienes ofertas guardadas.
             </div>
@@ -68,24 +151,28 @@
                 <div class="offer-vertical-separator" style="clear: both"></div>
             </div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showStatsPopup}" ng-click="showStatsPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showStatsPopup}">
-        <div class="block-title">Estadísticas<a ng-click="showStatsPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <h4>Estadísticas</h4>
             <div class="stats-title">Bolsa media</div>
             <div class="stats-attr">{{getAveragePay() | number : 2}}€/mes</div>
 
             <div class="stats-title">Pago medio por hora</div>
             <div class="stats-attr">{{getAveragePayPerHour() | number : 2}}€/hora</div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
 
-    <div class="popup-base" ng-class="{'popup-open': showHelpPopup}" ng-click="showHelpPopup=false"></div>
-    <div class="popup block" ng-class="{'popup-open': showHelpPopup}">
-        <div class="block-title">Acerca de<a ng-click="showHelpPopup = false" style="float: right; cursor: pointer">X</a></div>
-        <div class="block-content">
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <h4>Acerca de</h4>
             <div>
                 <p><i>peix</i> es un proyecto que tiene como fin actualizar la <a href="https://www.inf.upv.es/int/peix/">plataforma oficial</a> de la Escuela Técnica Superior de Ingeniería Informática de la Universidad Politécnica de Valencia que sirve a alumnos para encontrar prácticas en empresas.</p>
 
@@ -102,15 +189,30 @@
             <p>contact @ peixupv . es</p>
             <div class="title">Tecnología y código</div>
             <div>
-                <p>peix está desarrollado con AngularJS y PHP. Utiliza una base de datos Redis para almacenar las ofertas.</p>
+                <p>peix está desarrollado con AngularJS y PHP. Usa MaterializeCSS. Utiliza una base de datos Redis para almacenar las ofertas.</p>
                 <p>Puedes acceder al código desde el repositorio de <a href="https://github.com/rafaelgc/peix">Github</a>.</p>
             </div>
         </div>
+        <div class="modal-footer">
+            <a href="#!" class="btn modal-action modal-close waves-effect">Cerrar</a>
+        </div>
     </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script src="app.js"></script>
     <script src="common/directives/offer/offer.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('.modal').modal();
+            $('select').material_select();
+        });
+
+    </script>
 </body>
 </html>
 
