@@ -68,8 +68,9 @@ h2 {
     padding: 20px 0px 15px 0px;
 }
 
-.offer.expired {
-    opacity: 0.5;
+.offer.expired .start-date{
+    /*opacity: 0.90;*/
+    color: #bc0000;
 }
 
 .offer-title {

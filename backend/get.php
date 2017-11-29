@@ -6,7 +6,7 @@
  * Time: 11:58 PM
  */
 //ini_set('display_errors', 1);
-header('Content-type: application/json; charset=utf-8');
+header('Content-type:application/json;charset=utf-8');
 
 $result = array();
 
@@ -16,14 +16,17 @@ require 'scraper.php';
 $client = new Predis\Client();
 
 //Se guarda en value la lista de ofertas.
-$value = $client->get('peix.offers');
+$value = getOffers($client);
 
 //Si la última actualización es muy antigua o, directamente, nunca se ejecutó
 //el scraper, se ejecuta. No obstante, el usuario obtendrá el resultado viejo.
 
+
 if (needsUpdate($client)) {
     //shell_exec('php run-scraper.php &');
+
     shell_exec('php run-scraper.php > /dev/null 2>&1 &');
+    //runScraper($client);
 }
 
 if ($value === null) {

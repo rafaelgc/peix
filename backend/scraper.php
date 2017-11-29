@@ -8,9 +8,9 @@
 include_once 'external/simple_html_dom.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('UPDATE_MIN_TIME', 0); //Minutos.
+define('UPDATE_MIN_TIME', 15); //Minutos.
 
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 
 function changeDateFormat($date) {
     $date = DateTime::createFromFormat('d-m-Y', $date);
@@ -78,13 +78,13 @@ function runScraper($redisClient) {
         }
 
         $newOffer['publicationDate'] = changeDateFormat(trim($rows[0]->find('td')[1]->plaintext));
-        $newOffer['company'] = (trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
-        $newOffer['location'] = (trim($rows[2]->find('td')[1]->plaintext));
+        $newOffer['company'] = utf8_encode(trim($rows[1]->find('td')[1]->find('a')[0]->plaintext));
+        $newOffer['location'] = utf8_encode(trim($rows[2]->find('td')[1]->plaintext));
         $newOffer['hours'] = (trim($rows[4]->find('td')[1]->plaintext));
         $newOffer['pay'] = floatval(explode(' ', trim($rows[4]->find('td')[3]->plaintext))[0]);
-        $newOffer['tasks'] = (trim($rows[6]->find('td')[1]->plaintext));
-        $newOffer['profile'] = (trim($rows[7]->find('td')[1]->plaintext));
-        $newOffer['pfc'] = (trim($rows[5]->find('td')[1]->plaintext));
+        $newOffer['tasks'] = utf8_encode(trim($rows[6]->find('td')[1]->plaintext));
+        $newOffer['profile'] = utf8_encode(trim($rows[7]->find('td')[1]->plaintext));
+        $newOffer['pfc'] = utf8_encode(trim($rows[5]->find('td')[1]->plaintext));
 
         //Otra parte de la información hay que obtenerla de la página de la oferta. Por eso, para cada oferta listada en la página
         //principal se hará una nueva petición (POST) para obtener más datos de la oferta.
@@ -110,12 +110,12 @@ function runScraper($redisClient) {
 
         $duration = intval(explode(' ', trim($detailsRows[6]->find('td')[1]->plaintext))[0]);
 
-        $newOffer['description'] = (trim($detailsRows[3]->find('td')[1]->plaintext));
+        $newOffer['description'] = utf8_encode(trim($detailsRows[3]->find('td')[1]->plaintext));
         $newOffer['duration'] = ($duration);
         $newOffer['workingDay'] = (trim($detailsRows[7]->find('td')[1]->plaintext));
         $newOffer['vacancies'] = (intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
-        $newOffer['observactions'] = (trim($detailsRows[11]->find('td')[1]->plaintext));
-        $newOffer['continuity'] = (trim($detailsRows[9]->find('td')[1]->plaintext));
+        $newOffer['observations'] = utf8_encode(trim($detailsRows[11]->find('td')[1]->plaintext));
+        $newOffer['continuity'] = utf8_encode(trim($detailsRows[9]->find('td')[1]->plaintext));
 
         array_push($newOffers, $newOffer);
     }
@@ -128,4 +128,17 @@ function runScraper($redisClient) {
 
     $redisClient->set('peix.offers', $res);
     $redisClient->set('peix.lastUpdate', time());
+}
+
+function getOffers($redisClient) {
+    $offers = json_decode($redisClient->get('peix.offers'));
+    for ($i = 0; $i < count($offers); $i++) {
+
+        foreach ($offers[$i] as $key => $value) {
+            $offers[$i]->$key = htmlentities(utf8_decode($value));
+        }
+
+    }
+    return json_encode($offers);
+
 }
