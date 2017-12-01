@@ -1,12 +1,12 @@
 <div class="offer" ng-class="{'expired': offer.expired}">
-    <h2 class="offer-title">{{offer.company}}</h2>
+    <h2 class="offer-title" ng-bind-html="offer.company"></h2>
     <div class="offer-body">
-        <h3 class="offer-subtitle">{{offer.tasks}}</h3>
+        <h3 class="offer-subtitle" ng-bind-html="offer.tasks"></h3>
 
         <div class="row">
             <div class="col s4 m4 offer-label-big">
                 <!--<div class="hide-on-med-and-up">Fecha de inicio</div>-->
-                <div class="main">{{offer.start | date : 'd/M/y'}}</div>
+                <div class="main start-date">{{offer.start | date : 'd/M/y'}}</div>
                 <div>Fecha de inicio</div>
             </div>
             <div class="col s4 m4 offer-label-big">
@@ -26,33 +26,30 @@
 
         <div class="offer-label">
             <span class="offer-label-name">Localidad:</span>
-            <span class="offer-label-value">{{offer.location}}</span>
+            <span class="offer-label-value" ng-bind-html="offer.location"></span>
         </div>
 
         <div class="offer-label">
             <span class="offer-label-name">Posibilidad de continuidad:</span>
-            <span class="offer-label-value">{{offer.continuity}}</span>
+            <span class="offer-label-value" ng-bind-html="offer.continuity"></span>
         </div>
 
         <div class="offer-label">
             <span class="offer-label-name">Posibilidad de PFC:</span>
-            <span class="offer-label-value">{{offer.pfc}}</span>
+            <span class="offer-label-value" ng-bind-html="offer.pfc"></span>
         </div>
 
         <h3 class="offer-profile-title">Perfil</h3>
-        <div class="offer-profile-description">
-            {{offer.profile}}
+        <div class="offer-profile-description" ng-bind-html="offer.profile">
         </div>
 
         <h3 class="offer-profile-title">Descripción</h3>
-        <div class="offer-profile-description">
-            {{offer.description}}
+        <div class="offer-profile-description" ng-bind-html="offer.description">
         </div>
 
         <div ng-if="offer.observations">
             <h3 class="offer-profile-title">Observaciones</h3>
-            <div class="offer-profile-description">
-                {{offer.observations}}
+            <div class="offer-profile-description" ng-bind-html="offer.observations">
             </div>
         </div>
         <form class="button-container" method="post" action="https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php" target="_blank">

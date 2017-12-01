@@ -1,4 +1,4 @@
-angular.module('app', ['ngResource', 'common.directives.offer'])
+angular.module('app', ['ngResource', 'ngSanitize', 'common.directives.offer'])
     .controller('AppController', ['$scope', 'appLogic', '$window', function ($scope, appLogic, $window) {
         $scope.offers = appLogic.getOffers();
         $scope.filters = {};
