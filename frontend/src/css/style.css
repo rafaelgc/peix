@@ -48,7 +48,7 @@ nav {
 .content {
     padding: 20px 15px 25px 20px;
     max-width: 1024px;
-    margin: 25px auto 0px auto;
+    margin: 0px auto 0px auto;
     background-color: white;
 }
 
@@ -66,6 +66,9 @@ h2 {
 
 .offer {
     padding: 20px 0px 15px 0px;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .offer.expired .start-date{
@@ -78,7 +81,7 @@ h2 {
     background-color: #00b69f;
     color: white;
     padding: 15px;
-    border-radius: 5px 5px 0px 0px;
+    /*border-radius: 5px 5px 0px 0px;*/
 }
 
 .offer-subtitle {

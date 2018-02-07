@@ -8,7 +8,7 @@
 include_once 'external/simple_html_dom.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('UPDATE_MIN_TIME', 15); //Minutos.
+define('UPDATE_MIN_TIME', 0); //Minutos.
 
 ini_set('display_errors', 1);
 
@@ -112,7 +112,7 @@ function runScraper($redisClient) {
 
         $newOffer['description'] = utf8_encode(trim($detailsRows[3]->find('td')[1]->plaintext));
         $newOffer['duration'] = ($duration);
-        $newOffer['workingDay'] = (trim($detailsRows[7]->find('td')[1]->plaintext));
+        $newOffer['workingDay'] = utf8_encode(trim($detailsRows[7]->find('td')[1]->plaintext));
         $newOffer['vacancies'] = (intval(trim($detailsRows[7]->find('td')[3]->plaintext)));
         $newOffer['observations'] = utf8_encode(trim($detailsRows[11]->find('td')[1]->plaintext));
         $newOffer['continuity'] = utf8_encode(trim($detailsRows[9]->find('td')[1]->plaintext));
