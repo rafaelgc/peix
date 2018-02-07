@@ -100,7 +100,7 @@ function runScraper($redisClient) {
 
         $context  = stream_context_create($opts);
         $url = 'https://www.inf.upv.es/int/peix/alumnos/detalle_oferta.php';
-        $moreOfferDetails = file_get_contents($url, false, $context, -1, 40000);
+        $moreOfferDetails = file_get_contents($url, false, $context, 0, 40000);
 
         $offerDetailsRoot = str_get_html($moreOfferDetails);
 
