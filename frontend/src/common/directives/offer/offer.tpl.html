@@ -11,7 +11,7 @@
             </div>
             <div class="col s4 m4 offer-label-big">
                 <div class="main">{{offer.duration}} meses</div>
-                <div>{{offer.hours}}h/día ({{offer.workingDay}})</div>
+                <div>{{offer.hours}}h/día (<span ng-bind-html="offer.workingDay"></span>)</div>
                 <div>(aprox. {{calcECTS(offer)}} ECTS)</div>
             </div>
             <div class="col s4 m4 offer-label-big">
